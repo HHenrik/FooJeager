@@ -37,8 +37,7 @@
         android:id="@+id/mainMenuButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="mainMenuButton" />
+        android:layout_alignParentStart="true" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -46,6 +45,5 @@
         android:id="@+id/filterButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="filterMenuButton" />
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
