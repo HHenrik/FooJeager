@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">GoogleMapsExample</string>
+    <string name="kind_of_restaurant">Kind of restaurant:</string>
+    <string name="price">Price:</string>
+    <string name="kind_of_food">Kind of food:</string>
 </resources>
