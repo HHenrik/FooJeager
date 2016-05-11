@@ -179,7 +179,9 @@ private boolean testbBoolean = true;
     }
     public void filterMenuButton(View view){
         //Tillfälligt här. Använda removeindivdualmarker() istället vid filtering.
-        restaurantsList.get(0).getMarker().setVisible(false); //Antingen gömma undan eller ta bort helt. Om ta bort måste vi spara undan MarkerOptions[] i resturangobjektet också pga att den behövs för att skapa markeringen
+        //restaurantsList.get(0).getMarker().setVisible(false); //Antingen gömma undan eller ta bort helt. Om ta bort måste vi spara undan MarkerOptions[] i resturangobjektet också pga att den behövs för att skapa markeringen
+        Intent intent = new Intent(MainActivity.this, Activity_FilterMenu.class);
+        startActivity(intent);
     }
 
 
