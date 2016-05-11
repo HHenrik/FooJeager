@@ -53,6 +53,7 @@
         </activity>
         <activity android:name=".MainMenu"></activity>
         <activity android:name=".FilterMenu"></activity>
+        <activity android:name=".RestaurantActivity"></activity>
     </application>
 
 </manifest>

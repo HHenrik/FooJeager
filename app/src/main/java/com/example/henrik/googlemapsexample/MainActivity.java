@@ -1,6 +1,8 @@
 package com.example.henrik.googlemapsexample;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
@@ -17,6 +19,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -47,6 +50,19 @@ private boolean testbBoolean = true;
         setContentView(R.layout.activity_main);
         resturantMarkers = new Marker[20];//Max antal restauranger som visas
        setUserLocationOnMap();
+
+
+        Context context = getApplicationContext();
+        SharedPreferences  sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(restaurantsList);
+        prefsEditor.putString("ResturantObjectList", json);
+        prefsEditor.commit();
+
+
+
+
 
       /*  GoogleApiClient mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
@@ -88,7 +104,13 @@ private boolean testbBoolean = true;
         map.setOnInfoWindowClickListener( //När man trycker på texten så ska activty eller fragment öppnas med information om den restaurangen
                 new GoogleMap.OnInfoWindowClickListener(){
                     public void onInfoWindowClick(Marker marker){
+                 DataStorage.getInstance().setRestaurantsList(restaurantsList);
                         Log.d("infoClick","openAc");
+                        Intent intent = new Intent(MainActivity.this, RestaurantActivity.class);
+                       Bundle bundle = new Bundle();
+                       bundle.putString("key", marker.getTitle());
+                        intent.putExtras(bundle);
+                        startActivity(intent);
                     }
                 }
         );
@@ -101,11 +123,10 @@ private boolean testbBoolean = true;
 
             @Override
             public boolean onMarkerClick(Marker arg0) {
-
                 if(arg0 != null);
                 arg0.showInfoWindow();
                 //Här ska man anropa istället på en activty eller fragment där restaurangen ploppar upp med information.
-                restaurantsList.get(0).getMarker().remove();
+                //restaurantsList.get(0).getMarker().remove();
                         Log.d(restaurantsList.get(0).getName() + "  got removed","se");
                 Log.d(arg0.getTitle(),"PlaceName");//Här öppna resturangen
                 return true;
@@ -243,7 +264,12 @@ private boolean testbBoolean = true;
                         // restaurants.setOpen_now(placeObject.getString("open_now"))
                         restaurants.setPosition(restaurantLocation.toString());
                         restaurants.setVicinity(restaurantVicinity);
+                        //restaurants.setPhoneNumber(jsonObjectRestaurant.getInt("formatted_phone_number"));
+                        //Log.d(restaurants.getGoogleRating(),"tittahär");fdfdb
+
                         restaurantsList.add(restaurants);
+
+
 
                         Log.d(restaurantsList.get(0).getName(),"Titta");
 
@@ -260,6 +286,7 @@ private boolean testbBoolean = true;
                                 (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).snippet(restaurantVicinity);//Vi kan ha olika ikoner beroende på typ av restaurang eller nått sånt.
                     }
                     markerCounter++;
+
 
                 }
             }
@@ -291,6 +318,9 @@ private boolean testbBoolean = true;
 
             }
 
+        }
+        public ArrayList getArrayList(){
+            return restaurantsList;
         }
 
     }

@@ -27,5 +27,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:8.1.0'
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
+    compile 'com.google.code.gson:gson:2.5'
 
 }

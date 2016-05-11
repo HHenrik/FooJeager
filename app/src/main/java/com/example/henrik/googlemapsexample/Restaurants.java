@@ -11,8 +11,8 @@ public class Restaurants {
     private String open_now;
     private String name;
     private String vicinity;
-    private  Marker marker;
-
+    private Marker marker;
+    private int phoneNumber;
 
     public Marker getMarker() {
         return marker;
@@ -63,5 +63,13 @@ public class Restaurants {
 
     public void setVicinity(String vicinity) {
         this.vicinity = vicinity;
+    }
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
