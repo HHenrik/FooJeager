@@ -6,8 +6,9 @@ import java.util.ArrayList;
  * Created by Henrik on 2016-05-11.
  */
 public class DataStorage {
-     private static DataStorage dataStorage;
+    private static DataStorage dataStorage;
     private ArrayList<Restaurants> restaurantsList = new ArrayList();
+    private boolean isPlacedLoaded = false;
     private DataStorage(){
 
     }
@@ -26,5 +27,13 @@ public class DataStorage {
 
     public void setRestaurantsList(ArrayList<Restaurants> restaurantsList) {
         this.restaurantsList = restaurantsList;
+    }
+
+    public boolean isPlacedLoaded() {
+        return isPlacedLoaded;
+    }
+
+    public void setPlacedLoaded(boolean placedLoaded) {
+        isPlacedLoaded = placedLoaded;
     }
 }

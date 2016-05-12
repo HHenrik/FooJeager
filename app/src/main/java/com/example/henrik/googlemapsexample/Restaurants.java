@@ -72,4 +72,6 @@ public class Restaurants {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+
 }

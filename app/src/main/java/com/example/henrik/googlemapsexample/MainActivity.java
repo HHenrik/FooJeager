@@ -41,8 +41,9 @@ public class MainActivity extends FragmentActivity implements LocationListener {
     private Marker[] resturantMarkers;
     private ArrayList <Restaurants> restaurantsList = new ArrayList();
     private MarkerOptions[] resturantsMarkerOptions;
-    private String next_page_token;
-
+    private String nextPageToken;
+    private boolean needRetrievePageToken = true;
+    private boolean oncePage1 = true;
 private boolean testbBoolean = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,6 @@ private boolean testbBoolean = true;
         String json = gson.toJson(restaurantsList);
         prefsEditor.putString("ResturantObjectList", json);
         prefsEditor.commit();
-
 
 
 
@@ -232,13 +232,32 @@ private boolean testbBoolean = true;
         @Override
         protected void onPostExecute(String result) {
             Log.d("On Post execute", "PlaceName");
-            removeAllCurrentRestaurantMarkersFromMarkerArray();
+          //  removeAllCurrentRestaurantMarkersFromMarkerArray();
             parseJsonData(result);
             placeAllRestaurantMarkersOnMap();
+            needRetrievePageToken=true;
+            try {
+                Thread.sleep(1200);//värdet är inte optimerat för tillfället. Kan säkert vara lägre. Men behövs annars blir det skit av det...
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //testNextPage är kopirad i från browsern och fungerar garanterat.
+          //  String testNextPage = "https://maps.googleapis.com/maps/api/place/search/json?location=%2056.03129,14.15242&radius=10000&sensor=true&&types=restaurant&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE&pagetoken=CoQC_wAAAC3Mixbn_e_Po3I631GeRnYcOuza1gRomm6BoVPwmOqstuRVe9vJ77Lt4jejxUjBe7TycbZCPbspYkoLl2226wF29zN0OtZWx6KpdDhQN1eq3aUAq1mezGwx9X26aytaBkZ4ev1b0vyJMjWkbUXO3xv1eolQOWyahqJPwDZVi5gWhlD5y8TDaR_0N4YT-jvUyxjk1lDWoL8vyW3XlTJBvs3AFzqLr6AVbgr9CyKrXKtD0pLf8cKcpy34v1R4Q5H7lSEE0Dn552fiDCEp_oDnOxNvfiMYOcHgIO4ndrj5wQ7GSk733P4AXebSv-DCEDZrS_gFTcgKxv5ePxXhSSHQdfkSEEjWK7pM_p9j04MHqWDGzqUaFLyoSNTt1f4w1Om002OQvuMMGW-u";
+            String nextPageTokenURL = "https://maps.googleapis.com/maps/api/place/search/json?location=%2056.03129,14.15242&radius=10000&sensor=true&&types=restaurant&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE&pagetoken=" + nextPageToken;
+if(oncePage1){
+//iugugiigu
+   new GetRestaurantData().execute(nextPageTokenURL);
+    oncePage1=false;
 
-            String nextPageTokenURL = "https://maps.googleapis.com/maps/api/place/search/json?location=%2056.03129,14.15242&radius=10000&sensor=true&&types=restaurant&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE" + "&nexttoken=" + next_page_token;
+   // DataStorage.getInstance().setPlacedLoaded(true);
+   // oncePage1=false;
 
-
+}
+else{
+    for (int i = 0; i < restaurantsList.size(); i++) {  //Flyttat hit pga måste köras efter att vi fått hem samtliga pins
+        restaurantsList.get(i).setMarker(resturantMarkers[i]);
+    }
+            }
         }
 
         private void parseJsonData(String result){
@@ -247,8 +266,14 @@ private boolean testbBoolean = true;
                 JSONObject jsonObjectResult = null;
 
                 jsonObjectResult = new JSONObject(result);
-                next_page_token =  jsonObjectResult.getString("next_page_token");
-                Log.d(next_page_token,"Hasse");
+                if(needRetrievePageToken){
+                    nextPageToken =  jsonObjectResult.getString("next_page_token");
+                    needRetrievePageToken = false;
+                    Log.d(nextPageToken,"Nextpagetest");
+                    Log.d("Jonas","Nextpagetest");
+                }
+
+                Log.d(nextPageToken,"Hasse");
                 Log.d("Lasse","Hasse");
 
 
@@ -331,9 +356,7 @@ private boolean testbBoolean = true;
                     }
 
                 }
-                for (int i = 0; i < restaurantsList.size(); i++) {
-                    restaurantsList.get(i).setMarker(resturantMarkers[i]);
-                }
+
 
             }
 
@@ -343,10 +366,22 @@ private boolean testbBoolean = true;
         }
 
     }
+    private void hideRestaurantOnType(){
+        for(int i = 0;i < restaurantsList.size();i++){
+         //   if(){
+                restaurantsList.get(i).getMarker().setVisible(false);
+            }
+      //      else{
+               // restaurantsList.get(i).getMarker().setVisible(true);
+            }
+
+        }
 
 
 
-}
+
+
+
 
 
 
