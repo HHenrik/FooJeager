@@ -7,6 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:theme="@style/AppTheme"
     tools:context="com.example.henrik.googlemapsexample.Activity_FilterMenu"
     android:background="#ffffff">
 
@@ -20,7 +21,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="fill_parent"
@@ -55,105 +56,142 @@
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:text="New ToggleButton"
-                android:id="@+id/toggleButton"
-                android:layout_below="@+id/seekBar"
-                android:layout_marginTop="10dp" />
+                android:id="@+id/fastFoodToggle"
+                android:onClick="updatePreferences"
+                android:checked="false"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/fineDiningToggle"
+                android:textOff="Fast food \n = No"
+                android:textOn="Fast food \n = Yes" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton2"
+                android:id="@+id/fineDiningToggle"
                 android:layout_below="@+id/seekBar"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:onClick="onToggleClicked"
+                android:checked="false"
+                android:textOff="Fine dining \n = No"
+                android:textOn="Fine dining \n = Yes" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton3"
-                android:layout_alignTop="@+id/toggleButton2"
+                android:layout_alignTop="@+id/fineDiningToggle"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:id="@+id/pubToggle"
+                android:checked="false"
+                android:enabled="true"
+                android:onClick="updatePreferences"
+                android:textOn="Pub \n = Yes"
+                android:textOff="Pub \n = No" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton4"
+                android:id="@+id/cafeToggle"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/toggleButton" />
+                android:onClick="updatePreferences"
+                android:layout_below="@+id/fastFoodToggle"
+                android:textOff="Cafe \n = No"
+                android:textOn="Cafe \n = Yes" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton5"
-                android:layout_below="@+id/toggleButton2"
-                android:layout_alignLeft="@+id/toggleButton2"
-                android:layout_alignStart="@+id/toggleButton2" />
+                android:id="@+id/romanticToggle"
+                android:layout_below="@+id/fineDiningToggle"
+                android:layout_alignLeft="@+id/fineDiningToggle"
+                android:layout_alignStart="@+id/fineDiningToggle"
+                android:onClick="updatePreferences"
+                android:textOff="Romantic \n = No"
+                android:textOn="Romantic \n = Yes" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton6"
-                android:layout_below="@+id/toggleButton3"
-                android:layout_alignLeft="@+id/toggleButton3"
-                android:layout_alignStart="@+id/toggleButton3" />
+                android:id="@+id/buffetToggle"
+                android:layout_below="@+id/pubToggle"
+                android:layout_alignLeft="@+id/pubToggle"
+                android:onClick="updatePreferences"
+                android:textOff="Buffet \n = No"
+                android:textOn="Buffed \n = Yes" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton7"
+                android:id="@+id/asianToggle"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/textView3" />
+                android:layout_below="@+id/textView3"
+                android:checked="false"
+                android:textColor="#00ffffff"
+                android:background="@drawable/asian_toggle"
+                android:layout_marginTop="10dp" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton8"
-                android:layout_alignLeft="@+id/toggleButton5"
-                android:layout_alignStart="@+id/toggleButton5"
-                android:layout_below="@+id/textView3" />
+                android:id="@+id/burgerToggle"
+                android:layout_alignLeft="@+id/romanticToggle"
+                android:layout_alignStart="@+id/romanticToggle"
+                android:layout_below="@+id/textView3"
+                android:background="@drawable/burger_toggle"
+                android:textColor="#00ffffff"
+                android:layout_marginTop="10dp" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton9"
-                android:layout_alignLeft="@+id/toggleButton6"
-                android:layout_alignStart="@+id/toggleButton6"
-                android:layout_below="@+id/textView3" />
+                android:id="@+id/pizzaToggle"
+                android:layout_alignLeft="@+id/buffetToggle"
+                android:layout_alignStart="@+id/buffetToggle"
+                android:layout_below="@+id/textView3"
+                android:textColor="#00ffffff"
+                android:background="@drawable/pizza_toggle"
+                android:layout_marginTop="10dp" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton10"
-                android:layout_below="@+id/toggleButton7" />
+                android:id="@+id/indianToggle"
+                android:layout_below="@+id/asianToggle"
+                android:textColor="#00ffffff"
+                android:background="@drawable/indian_toggle"
+                android:layout_marginTop="10dp" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton11"
-                android:layout_below="@+id/toggleButton8"
-                android:layout_alignLeft="@+id/toggleButton8" />
+                android:id="@+id/sushiToggle"
+                android:layout_below="@+id/burgerToggle"
+                android:layout_alignLeft="@+id/burgerToggle"
+                android:textColor="#00ffffff"
+                android:background="@drawable/sushi_toggle"
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Kind of food:"
                 android:id="@+id/textView3"
-                android:layout_below="@+id/toggleButton5"
+                android:layout_below="@+id/romanticToggle"
                 android:textColor="#000000"
                 android:textSize="20dp"
                 android:textStyle="bold"
@@ -164,33 +202,46 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton12"
-                android:layout_below="@+id/toggleButton9"
-                android:layout_alignParentRight="true" />
+                android:id="@+id/meatToggle"
+                android:layout_below="@+id/pizzaToggle"
+                android:layout_alignParentRight="true"
+                android:textColor="#00ffffff"
+                android:background="@drawable/meat_toggle"
+                android:layout_marginTop="10dp" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton13"
-                android:layout_below="@+id/toggleButton10"
-                android:layout_alignParentLeft="true" />
+                android:id="@+id/seafoodToggle"
+                android:layout_below="@+id/indianToggle"
+                android:layout_alignParentLeft="true"
+                android:textColor="#00ffffff"
+                android:background="@drawable/seafood_toggle"
+                android:layout_marginTop="10dp" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton14"
-                android:layout_below="@+id/toggleButton11"
-                android:layout_alignLeft="@+id/toggleButton11" />
+                android:id="@+id/italianToggle"
+                android:layout_below="@+id/sushiToggle"
+                android:layout_alignLeft="@+id/sushiToggle"
+                android:textColor="#00ffffff"
+                android:background="@drawable/italian_toggle"
+                android:layout_marginTop="10dp" />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
-                android:id="@+id/toggleButton15"
-                android:layout_below="@+id/toggleButton12"
-                android:layout_alignParentRight="true" />
+                android:id="@+id/vegetarianToggle"
+                android:layout_below="@+id/meatToggle"
+                android:layout_alignParentRight="true"
+                android:textColor="#00ffffff"
+                android:background="@drawable/vegetarian_toggle"
+                android:layout_marginTop="10dp" />
+
         </RelativeLayout>
     </ScrollView>
 
