@@ -41,14 +41,14 @@ public class MainActivity extends FragmentActivity implements LocationListener {
     private Marker[] resturantMarkers;
     private ArrayList <Restaurants> restaurantsList = new ArrayList();
     private MarkerOptions[] resturantsMarkerOptions;
-
+    private String next_page_token;
 
 private boolean testbBoolean = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        resturantMarkers = new Marker[20];//Max antal restauranger som visas
+        resturantMarkers = new Marker[60];//Max antal restauranger som visas
        setUserLocationOnMap();
 
 
@@ -134,10 +134,11 @@ private boolean testbBoolean = true;
 
         });
 
-        String googlePlacesUrl = "https://maps.googleapis.com/maps/api/place/search/json?location=%2056.03129,14.15242&radius=5000&sensor=true&&types=restaurant&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE";
+        String googlePlacesUrl = "https://maps.googleapis.com/maps/api/place/search/json?location=%2056.03129,14.15242&radius=10000&sensor=true&&types=restaurant&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE";
         //Kordinater för Kristianstad. Kan byta till location.getLatitude(), location.getLongitude()
         if(testbBoolean) { //testBoolean tillfällig. Annars kommer den att anropas varje gång som användaren byter postion.
             new GetRestaurantData().execute(googlePlacesUrl);
+
         }
         testbBoolean = false;
     }
@@ -234,12 +235,24 @@ private boolean testbBoolean = true;
             removeAllCurrentRestaurantMarkersFromMarkerArray();
             parseJsonData(result);
             placeAllRestaurantMarkersOnMap();
+
+            String nextPageTokenURL = "https://maps.googleapis.com/maps/api/place/search/json?location=%2056.03129,14.15242&radius=10000&sensor=true&&types=restaurant&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE" + "&nexttoken=" + next_page_token;
+
+
         }
+
         private void parseJsonData(String result){
             try {
                 int markerCounter = 0;
                 JSONObject jsonObjectResult = null;
+
                 jsonObjectResult = new JSONObject(result);
+                next_page_token =  jsonObjectResult.getString("next_page_token");
+                Log.d(next_page_token,"Hasse");
+                Log.d("Lasse","Hasse");
+
+
+
                 JSONArray jsonRestaurantArray = null;
                 jsonRestaurantArray = jsonObjectResult.getJSONArray("results");
                 resturantsMarkerOptions = new MarkerOptions[jsonRestaurantArray.length()];
@@ -266,6 +279,10 @@ private boolean testbBoolean = true;
                         // restaurants.setOpen_now(placeObject.getString("open_now"))
                         restaurants.setPosition(restaurantLocation.toString());
                         restaurants.setVicinity(restaurantVicinity);
+
+
+
+
                         //restaurants.setPhoneNumber(jsonObjectRestaurant.getInt("formatted_phone_number"));
                         //Log.d(restaurants.getGoogleRating(),"tittahär");fdfdb
 

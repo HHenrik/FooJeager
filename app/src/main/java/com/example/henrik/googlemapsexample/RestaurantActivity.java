@@ -20,7 +20,7 @@ public class RestaurantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.restaurant);
-
+        restaurantsList = DataStorage.getInstance().getRestaurantsList();
         TextView infoView = (TextView)findViewById(R.id.infoView);
         Context context = getApplicationContext();
         setDataOnScreen(context,infoView);
@@ -42,12 +42,15 @@ public class RestaurantActivity extends AppCompatActivity {
         googleRating = (RatingBar) findViewById(R.id.ratingBar);
         for (int i = 0; i < DataStorage.getInstance().getRestaurantsList().size(); i++) {
             Log.d(DataStorage.getInstance().getRestaurantsList().get(i).getName(),"Loop");
-            if (DataStorage.getInstance().getRestaurantsList().get(i).getName().equals(restName)) {
-               googleRating.setRating(Float.parseFloat(DataStorage.getInstance().getRestaurantsList().get(i).getGoogleRating()));
+            if (restaurantsList.get(i).getName().equals(restName)) {
+               googleRating.setRating(Float.parseFloat(restaurantsList.get(i).getGoogleRating()));
                 //Log.d(DataStorage.getInstance().getRestaurantsList().get(i).getPhoneNumber(),"Git Gud");
-                //gf
+
             }
-        }}}
+        }}
+
+
+}
 
 
 
