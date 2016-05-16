@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/restaurant_view">
 
     <RatingBar
         android:layout_width="wrap_content"
@@ -18,7 +19,18 @@
         android:id="@+id/callButton"
         android:layout_below="@+id/ratingBar"
         android:layout_marginTop="62dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="call" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/webSiteButton"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/callButton"
+        android:layout_alignLeft="@+id/callButton"
+        android:layout_alignStart="@+id/callButton"
+        android:onClick="webPageButton" />
 
     <ImageButton
         android:layout_width="wrap_content"

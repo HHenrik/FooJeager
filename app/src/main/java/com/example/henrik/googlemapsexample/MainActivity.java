@@ -42,9 +42,13 @@ public class MainActivity extends FragmentActivity implements LocationListener {
     private ArrayList <Restaurants> restaurantsList = new ArrayList();
     private MarkerOptions[] resturantsMarkerOptions;
     private String nextPageToken;
-    private boolean needRetrievePageToken = true;
     private boolean oncePage1 = true;
-private boolean testbBoolean = true;
+    private boolean testbBoolean = true;
+    private boolean restaurantDetail = true;
+    private boolean doneSettingUpForParse = false;
+    private String restaurantDetailHTML;
+    private int savedObjectId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,7 +142,6 @@ private boolean testbBoolean = true;
         //Kordinater för Kristianstad. Kan byta till location.getLatitude(), location.getLongitude()
         if(testbBoolean) { //testBoolean tillfällig. Annars kommer den att anropas varje gång som användaren byter postion.
             new GetRestaurantData().execute(googlePlacesUrl);
-
         }
         testbBoolean = false;
     }
@@ -193,7 +196,7 @@ private boolean testbBoolean = true;
 
         @Override
         protected String doInBackground(String... googlePlacesURL) {
-            Log.d(googlePlacesURL.toString(),"Se hit");
+          //  Log.d(googlePlacesURL.toString(),"Se hit");
             StringBuilder returnedTextBuilder = new StringBuilder();
 
             for (String googlePlacesSearchURL : googlePlacesURL) {
@@ -233,111 +236,164 @@ private boolean testbBoolean = true;
         protected void onPostExecute(String result) {
             Log.d("On Post execute", "PlaceName");
           //  removeAllCurrentRestaurantMarkersFromMarkerArray();
-            parseJsonData(result);
-            placeAllRestaurantMarkersOnMap();
-            needRetrievePageToken=true;
+            if(restaurantDetail) {
+
+
+                parseJsonData(result);
+                placeAllRestaurantMarkersOnMap();
+                try {
+                    Thread.sleep(1200);//värdet är inte optimerat för tillfället. Kan säkert vara lägre. Men behövs annars blir det skit av det...
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //testNextPage är kopirad i från browsern och fungerar garanterat.
+                //  String testNextPage = "https://maps.googleapis.com/maps/api/place/search/json?location=%2056.03129,14.15242&radius=10000&sensor=true&&types=restaurant&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE&pagetoken=CoQC_wAAAC3Mixbn_e_Po3I631GeRnYcOuza1gRomm6BoVPwmOqstuRVe9vJ77Lt4jejxUjBe7TycbZCPbspYkoLl2226wF29zN0OtZWx6KpdDhQN1eq3aUAq1mezGwx9X26aytaBkZ4ev1b0vyJMjWkbUXO3xv1eolQOWyahqJPwDZVi5gWhlD5y8TDaR_0N4YT-jvUyxjk1lDWoL8vyW3XlTJBvs3AFzqLr6AVbgr9CyKrXKtD0pLf8cKcpy34v1R4Q5H7lSEE0Dn552fiDCEp_oDnOxNvfiMYOcHgIO4ndrj5wQ7GSk733P4AXebSv-DCEDZrS_gFTcgKxv5ePxXhSSHQdfkSEEjWK7pM_p9j04MHqWDGzqUaFLyoSNTt1f4w1Om002OQvuMMGW-u";
+                String nextPageTokenURL = "https://maps.googleapis.com/maps/api/place/search/json?location=%2056.03129,14.15242&radius=10000&sensor=true&&types=restaurant&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE&pagetoken=" + nextPageToken;
+
+                if (oncePage1) {
+                    oncePage1 = false;
+                    new GetRestaurantData().execute(nextPageTokenURL);
+                } else {
+                    for (int i = 0; i < restaurantsList.size(); i++) {  //Flyttat hit pga måste köras efter att vi fått hem samtliga pins
+                        restaurantsList.get(i).setMarker(resturantMarkers[i]);
+                    }
+                    restaurantDetail = false;
+                }
+            }
+            if(restaurantDetail == false) {
+                if(doneSettingUpForParse){
+                    parseRestaurantDetails(result);
+                }
+                else{
+//                    for(int i=0;i<restaurantsList.size();i++){ //Om hämta details för alla så kommer det att behövas göras en sökning för varje. Har ju bara 1000 sökningar så kan bli problem...  //Nurvarande bara för First Hotel Christian IV
+                        doneSettingUpForParse = true;
+                        restaurantDetail = false;
+                        restaurantDetailHTML = "https://maps.googleapis.com/maps/api/place/details/json?placeid="+restaurantsList.get(0).getId()+"&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE";
+                        //restaurantsList.get(i).getId()
+                        savedObjectId = 0;
+                        new GetRestaurantData().execute(restaurantDetailHTML);
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+  //                      }
+                    }
+                }
+
+            }
+                DataStorage.getInstance().setPlacedLoaded(true);
+            }
+        }
+        private void parseRestaurantDetails(String result){//Fungerar
+
+            Log.d("WOULD YOU LOOK AT THAT1","SeHIT");
+            JSONObject jsonObjectResult = null;
             try {
-                Thread.sleep(1200);//värdet är inte optimerat för tillfället. Kan säkert vara lägre. Men behövs annars blir det skit av det...
-            } catch (InterruptedException e) {
+                jsonObjectResult = new JSONObject(result);
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-            //testNextPage är kopirad i från browsern och fungerar garanterat.
-          //  String testNextPage = "https://maps.googleapis.com/maps/api/place/search/json?location=%2056.03129,14.15242&radius=10000&sensor=true&&types=restaurant&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE&pagetoken=CoQC_wAAAC3Mixbn_e_Po3I631GeRnYcOuza1gRomm6BoVPwmOqstuRVe9vJ77Lt4jejxUjBe7TycbZCPbspYkoLl2226wF29zN0OtZWx6KpdDhQN1eq3aUAq1mezGwx9X26aytaBkZ4ev1b0vyJMjWkbUXO3xv1eolQOWyahqJPwDZVi5gWhlD5y8TDaR_0N4YT-jvUyxjk1lDWoL8vyW3XlTJBvs3AFzqLr6AVbgr9CyKrXKtD0pLf8cKcpy34v1R4Q5H7lSEE0Dn552fiDCEp_oDnOxNvfiMYOcHgIO4ndrj5wQ7GSk733P4AXebSv-DCEDZrS_gFTcgKxv5ePxXhSSHQdfkSEEjWK7pM_p9j04MHqWDGzqUaFLyoSNTt1f4w1Om002OQvuMMGW-u";
-            String nextPageTokenURL = "https://maps.googleapis.com/maps/api/place/search/json?location=%2056.03129,14.15242&radius=10000&sensor=true&&types=restaurant&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE&pagetoken=" + nextPageToken;
-if(oncePage1){
-//iugugiigu
-   new GetRestaurantData().execute(nextPageTokenURL);
-    oncePage1=false;
+            try {
+                JSONObject jObjectResult = (JSONObject) jsonObjectResult.get("result");
+                restaurantsList.get(savedObjectId).setPhoneNumber(jObjectResult.getString("formatted_phone_number"));
+                restaurantsList.get(savedObjectId).setWebsiteLink(jObjectResult.getString("website"));
+                //öppettider finns även men alla verkar inte ha det
+                //Hemsida finns och den har nog alla
 
-   // DataStorage.getInstance().setPlacedLoaded(true);
-   // oncePage1=false;
-
-}
-else{
-    for (int i = 0; i < restaurantsList.size(); i++) {  //Flyttat hit pga måste köras efter att vi fått hem samtliga pins
-        restaurantsList.get(i).setMarker(resturantMarkers[i]);
-    }
+            } catch (JSONException e) {
+            } catch (Exception e) {
             }
+
+           // Log.d(result,"SeHIT");
+
+            Log.d("WOULD YOU LOOK AT THAT2","SeHIT");
+
+
+
+
+
+
         }
 
         private void parseJsonData(String result){
-            try {
-                int markerCounter = 0;
-                JSONObject jsonObjectResult = null;
+                try {
+                    int markerCounter = 0;
+                    JSONObject jsonObjectResult = null;
 
-                jsonObjectResult = new JSONObject(result);
-                if(needRetrievePageToken){
-                    nextPageToken =  jsonObjectResult.getString("next_page_token");
-                    needRetrievePageToken = false;
-                    Log.d(nextPageToken,"Nextpagetest");
-                    Log.d("Jonas","Nextpagetest");
-                }
+                    jsonObjectResult = new JSONObject(result);
 
-                Log.d(nextPageToken,"Hasse");
-                Log.d("Lasse","Hasse");
+                    nextPageToken = jsonObjectResult.getString("next_page_token");
+                    Log.d(nextPageToken, "Nextpagetest");
+                    Log.d("Jonas", "Nextpagetest");
 
 
-
-                JSONArray jsonRestaurantArray = null;
-                jsonRestaurantArray = jsonObjectResult.getJSONArray("results");
-                resturantsMarkerOptions = new MarkerOptions[jsonRestaurantArray.length()];
-                Log.d(String.valueOf(jsonRestaurantArray.length()), "PlaceName");
-
-                for (int p = 0; p < jsonRestaurantArray.length(); p++) {
-                    boolean valueIsMissing = false;//Ta bort
-                    LatLng restaurantLocation = null;
-                    String restaurantName = "";
-                    String restaurantVicinity = "";
-                    try {
-                        valueIsMissing = false;
-                        JSONObject jsonObjectRestaurant = jsonRestaurantArray.getJSONObject(p);
-                        JSONObject locationObject = jsonObjectRestaurant.getJSONObject("geometry").getJSONObject("location");
-                        restaurantName = jsonObjectRestaurant.getString("name");
-                        restaurantLocation = new LatLng(Double.valueOf(locationObject.getString("lat")), Double.valueOf(locationObject.getString("lng")));
-                        restaurantVicinity = jsonObjectRestaurant.getString("vicinity");
-
-                        Log.d(restaurantName, "PlaceName");
-
-                        Restaurants restaurants = new Restaurants();
-                        restaurants.setGoogleRating(jsonObjectRestaurant.getString("rating"));
-                        restaurants.setName(jsonObjectRestaurant.getString("name"));
-                        // restaurants.setOpen_now(placeObject.getString("open_now"))
-                        restaurants.setPosition(restaurantLocation.toString());
-                        restaurants.setVicinity(restaurantVicinity);
+                    Log.d(nextPageToken, "Hasse");
+                    Log.d("Lasse", "Hasse");
 
 
+                    JSONArray jsonRestaurantArray = null;
+                    jsonRestaurantArray = jsonObjectResult.getJSONArray("results");
+                    resturantsMarkerOptions = new MarkerOptions[jsonRestaurantArray.length()];
+                    Log.d(String.valueOf(jsonRestaurantArray.length()), "PlaceName");
+
+                    for (int p = 0; p < jsonRestaurantArray.length(); p++) {
+                        boolean valueIsMissing = false;//Ta bort
+                        LatLng restaurantLocation = null;
+                        String restaurantName = "";
+                        String restaurantVicinity = "";
+                        try {
+                            valueIsMissing = false;
+                            JSONObject jsonObjectRestaurant = jsonRestaurantArray.getJSONObject(p);
+                            JSONObject locationObject = jsonObjectRestaurant.getJSONObject("geometry").getJSONObject("location");
+                            restaurantName = jsonObjectRestaurant.getString("name");
+                            restaurantLocation = new LatLng(Double.valueOf(locationObject.getString("lat")), Double.valueOf(locationObject.getString("lng")));
+                            restaurantVicinity = jsonObjectRestaurant.getString("vicinity");
+
+                            Log.d(restaurantName, "PlaceName");
+
+                            Restaurants restaurants = new Restaurants();
+                            restaurants.setGoogleRating(jsonObjectRestaurant.getString("rating"));
+                            restaurants.setName(jsonObjectRestaurant.getString("name"));
+                            // restaurants.setOpen_now(placeObject.getString("open_now"))
+                            restaurants.setPosition(restaurantLocation.toString());
+                            restaurants.setVicinity(restaurantVicinity);
+                            restaurants.setId(jsonObjectRestaurant.getString("place_id"));
 
 
-                        //restaurants.setPhoneNumber(jsonObjectRestaurant.getInt("formatted_phone_number"));
-                        //Log.d(restaurants.getGoogleRating(),"tittahär");fdfdb
+                            //restaurants.setPhoneNumber(jsonObjectRestaurant.getInt("formatted_phone_number"));
+                            //Log.d(restaurants.getGoogleRating(),"tittahär");fdfdb
 
-                        restaurantsList.add(restaurants);
-
-
-
-                        Log.d(restaurantsList.get(0).getName(),"Titta");
+                            restaurantsList.add(restaurants);
 
 
-                    } catch (JSONException exception) {
-                        valueIsMissing = true;
-                        exception.printStackTrace();
+                            Log.d(restaurantsList.get(0).getName(), "Titta");
+
+
+                        } catch (JSONException exception) {
+                            valueIsMissing = true;
+                            exception.printStackTrace();
+                        }
+                        if (valueIsMissing) {
+                            resturantsMarkerOptions[p] = null;
+                        } else {
+                            Log.d("Placing marker", "PlaceName");
+                            resturantsMarkerOptions[p] = new MarkerOptions().position(restaurantLocation).title(restaurantName).icon
+                                    (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).snippet(restaurantVicinity);//Vi kan ha olika ikoner beroende på typ av restaurang eller nått sånt.
+                        }
+                        markerCounter++;
+
+
                     }
-                    if (valueIsMissing) {
-                        resturantsMarkerOptions[p] = null;
-                    } else {
-                        Log.d("Placing marker", "PlaceName");
-                        resturantsMarkerOptions[p] = new MarkerOptions().position(restaurantLocation).title(restaurantName).icon
-                                (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).snippet(restaurantVicinity);//Vi kan ha olika ikoner beroende på typ av restaurang eller nått sånt.
-                    }
-                    markerCounter++;
-
-
-                }
-            }
-            catch(Exception ex){
+                } catch (Exception ex) {
                     ex.printStackTrace();
+                }
+
+
+
             }
-        }
+
+
+
         private void removeAllCurrentRestaurantMarkersFromMarkerArray(){//Onödig om vi bara ska söka en gång med en statisk plats
             if (resturantMarkers != null) {
                 for (int placedMarker = 0; placedMarker < resturantMarkers.length; placedMarker++) {
@@ -365,7 +421,7 @@ else{
             return restaurantsList;
         }
 
-    }
+    
     private void hideRestaurantOnType(){
         for(int i = 0;i < restaurantsList.size();i++){
          //   if(){

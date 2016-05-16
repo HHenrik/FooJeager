@@ -13,6 +13,8 @@ public class Restaurants {
     private String vicinity;
     private Marker marker;
     private String phoneNumber;
+    private String id;
+    private String websiteLink;
 
     public Marker getMarker() {
         return marker;
@@ -74,4 +76,19 @@ public class Restaurants {
     }
 
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getWebsiteLink() {
+        return websiteLink;
+    }
+
+    public void setWebsiteLink(String websiteLink) {
+        this.websiteLink = websiteLink;
+    }
 }

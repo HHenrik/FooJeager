@@ -9,6 +9,7 @@ public class DataStorage {
     private static DataStorage dataStorage;
     private ArrayList<Restaurants> restaurantsList = new ArrayList();
     private boolean isPlacedLoaded = false;
+    private String activeWebLink;
     private DataStorage(){
 
     }
@@ -35,5 +36,13 @@ public class DataStorage {
 
     public void setPlacedLoaded(boolean placedLoaded) {
         isPlacedLoaded = placedLoaded;
+    }
+
+    public String getActiveWebLink() {
+        return activeWebLink;
+    }
+
+    public void setActiveWebLink(String activeWebLink) {
+        this.activeWebLink = activeWebLink;
     }
 }
