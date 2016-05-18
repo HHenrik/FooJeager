@@ -30,10 +30,7 @@ public class ReviewViewer extends AppCompatActivity {
             list.add(new ReviewObject(3, "Nicklas Brisendal", "Äter hellre på khai mui."));
         }
         else{
-            for(int i=0;i<DataStorage.getInstance().getRestaurantsList().size();i++) {
-                if(DataStorage.getInstance().getRestaurantsList().get(i).getName().equals(DataStorage.getInstance().getActiveRestaurant()))
-                list = DataStorage.getInstance().getRestaurantsList().get(i).getReviews();
-            }
+                list = DataStorage.getInstance().getRestaurantList().get(DataStorage.getInstance().getActiveRestaurant()).getReviews();
         }
 
 

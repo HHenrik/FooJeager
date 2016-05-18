@@ -23,7 +23,7 @@ public class Website_fragment extends Fragment {
     public void createWebView(View v){
         WebView webView = (WebView) v.findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(DataStorage.getInstance().getActiveWebLink());
+        webView.loadUrl(DataStorage.getInstance().getRestaurantList().get(DataStorage.getInstance().getActiveRestaurant()).getWebsiteLink());
         webView.setWebViewClient(new WebViewClient());
 
     }

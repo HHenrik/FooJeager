@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by Henrik on 2016-05-06.
  */
-public class Restaurants {
+public class Restaurant {
     private LatLng position;
     private String googleRating;
     private String open_now;
@@ -19,7 +19,9 @@ public class Restaurants {
     private String id;
     private String websiteLink;
     private String priceLevel;
-    private ArrayList <ReviewObject> reviews = new ArrayList();;
+    private ArrayList <ReviewObject> reviews = new ArrayList();
+    private String[] openHoursArray;
+    private boolean openNow;
 
 
 
@@ -113,5 +115,21 @@ public class Restaurants {
 
     public void setReviews(ArrayList reviews) {
         this.reviews = reviews;
+    }
+
+    public String[] getOpenHoursArray() {
+        return openHoursArray;
+    }
+
+    public void setOpenHoursArray(String[] openHoursArray) {
+        this.openHoursArray = openHoursArray;
+    }
+
+    public boolean getOpenNow() {
+        return openNow;
+    }
+
+    public void setOpenNow(boolean openNow) {
+        this.openNow = openNow;
     }
 }

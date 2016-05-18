@@ -9,13 +9,12 @@ import java.util.ArrayList;
  */
 public class DataStorage {
     private static DataStorage dataStorage;
-    private ArrayList<Restaurants> restaurantsList = new ArrayList();
+    private ArrayList<Restaurant> restaurantList = new ArrayList();
     private boolean isPlacedLoaded = false;
-    private String activeWebLink;
-    private LatLng userPostion;
+    private LatLng userPosition;
     private boolean userPositionSupport = false;
     private boolean reviewType;
-    private String activeRestaurant;
+    private int activeRestaurantIndex;
     private DataStorage(){
 
     }
@@ -28,12 +27,12 @@ public class DataStorage {
         return dataStorage;
     }
 
-    public ArrayList<Restaurants> getRestaurantsList() {
-        return restaurantsList;
+    public ArrayList<Restaurant> getRestaurantList() {
+        return restaurantList;
     }
 
-    public void setRestaurantsList(ArrayList<Restaurants> restaurantsList) {
-        this.restaurantsList = restaurantsList;
+    public void setRestaurantList(ArrayList<Restaurant> restaurantList) {
+        this.restaurantList = restaurantList;
     }
 
     public boolean isPlacedLoaded() {
@@ -44,20 +43,12 @@ public class DataStorage {
         isPlacedLoaded = placedLoaded;
     }
 
-    public String getActiveWebLink() {
-        return activeWebLink;
+    public LatLng getUserPosition() {
+        return userPosition;
     }
 
-    public void setActiveWebLink(String activeWebLink) {
-        this.activeWebLink = activeWebLink;
-    }
-
-    public LatLng getUserPostion() {
-        return userPostion;
-    }
-
-    public void setUserPostion(LatLng userPostion) {
-        this.userPostion = userPostion;
+    public void setUserPosition(LatLng userPosition) {
+        this.userPosition = userPosition;
     }
 
     public boolean isUserPositionSupport() {
@@ -76,11 +67,11 @@ public class DataStorage {
         this.reviewType = reviewType;
     }
 
-    public String getActiveRestaurant() {
-        return activeRestaurant;
+    public Integer getActiveRestaurant() {
+        return activeRestaurantIndex;
     }
 
-    public void setActiveRestaurant(String activeRestaurant) {
-        this.activeRestaurant = activeRestaurant;
+    public void setActiveRestaurant(int activeRestaurantIndex) {
+        this.activeRestaurantIndex = activeRestaurantIndex;
     }
 }
