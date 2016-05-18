@@ -52,5 +52,5 @@
         android:background="#00ffffff"
         android:visibility="visible"
         android:clickable="false"
-        android:onClick="filterButtonClicked" />
+        android:onClick="buttonClicked" />
 </RelativeLayout>

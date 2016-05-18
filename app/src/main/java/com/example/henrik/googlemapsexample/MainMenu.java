@@ -17,17 +17,6 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
-
-    public void filterButtonClicked(View view){
-
-        Intent intent = new Intent(MainMenu.this, Activity_FilterMenu.class);
-        startActivity(intent);
-    }
-
-
-
-
-/*
     public void buttonClicked(View view) {
         Intent intent;
 
@@ -51,5 +40,5 @@ public class MainMenu extends AppCompatActivity {
         }
 
     }
-    */
+
 }
