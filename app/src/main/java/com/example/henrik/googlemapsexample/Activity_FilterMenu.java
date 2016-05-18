@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
 public class Activity_FilterMenu extends AppCompatActivity implements View.OnClickListener {
@@ -28,6 +29,8 @@ public class Activity_FilterMenu extends AppCompatActivity implements View.OnCli
     private ToggleButton seafoodToggle;
     private ToggleButton italianToggle;
     private ToggleButton vegetarianToggle;
+
+    private boolean firstBoot = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,30 @@ public class Activity_FilterMenu extends AppCompatActivity implements View.OnCli
         seafoodToggle = (ToggleButton) findViewById(R.id.seafoodToggle);
         italianToggle = (ToggleButton) findViewById(R.id.italianToggle);
         vegetarianToggle = (ToggleButton) findViewById(R.id.vegetarianToggle);
+        SeekBar priceAdjuster = (SeekBar) findViewById(R.id.priceAdjuster);
+
+        priceAdjuster.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(firstBoot == false) {
+                    editor.putInt("priceSet", progress);
+                    Log.d("Set price:", String.valueOf(progress));
+                    editor.commit();
+                }
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
 
         //Do the onClick method if any of the buttons are clicked
         fastFoodToggle.setOnClickListener(this);
@@ -91,6 +118,10 @@ public class Activity_FilterMenu extends AppCompatActivity implements View.OnCli
         seafoodToggle.setChecked(preferences.getBoolean("seafoodToggled", false));
         italianToggle.setChecked(preferences.getBoolean("italianToggled", false));
         vegetarianToggle.setChecked(preferences.getBoolean("vegetarianToggled", false));
+
+        Log.d("Value is: ", String.valueOf(preferences.getInt("priceSet",2)));
+        priceAdjuster.setProgress(preferences.getInt("priceSet", 2));
+        firstBoot = false;
     }
 
     @Override

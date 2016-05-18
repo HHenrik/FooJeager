@@ -42,7 +42,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainMenu" />
-        <activity android:name=".FilterMenu" />
         <activity android:name=".RestaurantActivity" />
         <activity android:name=".ReviewViewer" />
         <activity android:name=".Activity_FilterMenu"></activity>
