@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -25,7 +26,7 @@ import java.util.Locale;
 public class RestaurantActivity extends AppCompatActivity {
     private ArrayList <Restaurants> restaurantsList = new ArrayList();
     private String restaurantPhoneNumber;
-    private LatLng restaurantPostion;
+    private LatLng restaurantPosition;
     private String restaurantName;
 
     @Override
@@ -53,15 +54,29 @@ public class RestaurantActivity extends AppCompatActivity {
 
         googleRating = (RatingBar) findViewById(R.id.ratingBar);
         for (int i = 0; i < DataStorage.getInstance().getRestaurantsList().size(); i++) {
-          //  Log.d(DataStorage.getInstance().getRestaurantsList().get(i).getName(),"Loop");
+            //  Log.d(DataStorage.getInstance().getRestaurantsList().get(i).getName(),"Loop");
             if (restaurantsList.get(i).getName().equals(restName)) {
-               googleRating.setRating(Float.parseFloat(restaurantsList.get(i).getGoogleRating()));
-                restaurantPostion = restaurantsList.get(i).getPosition();
+                googleRating.setRating(Float.parseFloat(restaurantsList.get(i).getGoogleRating()));
+                restaurantPosition = restaurantsList.get(i).getPosition();
                 //Log.d(DataStorage.getInstance().getRestaurantsList().get(i).getPhoneNumber(),"Git Gud");
                 restaurantPhoneNumber = restaurantsList.get(i).getPhoneNumber();
-               DataStorage.getInstance().setActiveWebLink(restaurantsList.get(i).getWebsiteLink());
+                DataStorage.getInstance().setActiveWebLink(restaurantsList.get(i).getWebsiteLink());
             }
-        }}
+        }
+
+
+            
+            RatingBar appUserReviews;
+            appUserReviews = (RatingBar) findViewById(R.id.appUserReviews);
+            appUserReviews.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Intent intent = new Intent(RestaurantActivity.this, ReviewViewer.class);
+                    startActivity(intent);
+                    return true;
+                }
+            });
+        }
 
     public void call(View v){
         try {
@@ -93,18 +108,19 @@ public class RestaurantActivity extends AppCompatActivity {
         }
     }
     public void gpsButton(View v){
-        LatLng latLng;
+        LatLng userPosition;
         if(DataStorage.getInstance().isUserPositionSupport()){
-            latLng = DataStorage.getInstance().getUserPostion();
+            userPosition = DataStorage.getInstance().getUserPostion();
         }
         else{
-            latLng = new LatLng(56.0333333,14.1333333);  //Kordinater för Kristianstad. Om det ingen user position.
+            userPosition = new LatLng(56.0333333,14.1333333);  //Kordinater för Kristianstad. Om det ingen user position.
         }
-        String googleDirectionURL = String.format(Locale.ENGLISH, "http://maps.google.com/maps?saddr=%f,%f(%s)&daddr=%f,%f (%s)", latLng.latitude, latLng.longitude, "Your Position", restaurantPostion.latitude, restaurantPostion.longitude, restaurantName);
+        String googleDirectionURL = String.format(Locale.ENGLISH, "http://maps.google.com/maps?saddr=%f,%f(%s)&daddr=%f,%f (%s)", userPosition.latitude, userPosition.longitude, "Your Position", restaurantPosition.latitude, restaurantPosition.longitude, restaurantName);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(googleDirectionURL));
         intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
         startActivity(intent);
     }
+
 
 }
 

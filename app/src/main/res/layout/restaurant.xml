@@ -76,4 +76,12 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="45dp" />
 
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/appUserReviews"
+        android:layout_alignBottom="@+id/isOpenNow"
+        android:layout_alignLeft="@+id/directionButton"
+        android:layout_alignStart="@+id/directionButton" />
+
 </RelativeLayout>

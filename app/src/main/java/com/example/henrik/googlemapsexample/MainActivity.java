@@ -45,7 +45,6 @@ public class MainActivity extends FragmentActivity implements LocationListener {
     private boolean oncePage1 = true;
     private boolean testbBoolean = true;
     private boolean restaurantDetail = true;
-    private boolean doneSettingUpForParse = false;
     private String restaurantDetailHTML;
     private int savedObjectId;
 
@@ -292,10 +291,9 @@ public class MainActivity extends FragmentActivity implements LocationListener {
             }
             try {
                 JSONObject jObjectResult = (JSONObject) jsonObjectResult.get("result");
+
                 restaurantsList.get(savedObjectId).setPhoneNumber(jObjectResult.getString("formatted_phone_number"));
                 restaurantsList.get(savedObjectId).setWebsiteLink(jObjectResult.getString("website"));
-                //öppettider finns även men alla verkar inte ha det
-                //Hemsida finns och den har nog alla
 
             } catch (JSONException e) {
             } catch (Exception e) {
