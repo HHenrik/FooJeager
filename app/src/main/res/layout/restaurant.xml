@@ -7,10 +7,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ratingBar"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:isIndicator="true"
-        />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
 
     <ImageButton
@@ -83,5 +82,25 @@
         android:layout_alignBottom="@+id/isOpenNow"
         android:layout_alignLeft="@+id/directionButton"
         android:layout_alignStart="@+id/directionButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Google Rating"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/infoView"
+        android:layout_alignRight="@+id/restruantPicture"
+        android:layout_alignEnd="@+id/restruantPicture" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="App User Reviews"
+        android:id="@+id/textView5"
+        android:layout_alignTop="@+id/appUserReviews"
+        android:layout_alignRight="@+id/restruantPicture"
+        android:layout_alignEnd="@+id/restruantPicture" />
 
 </RelativeLayout>
