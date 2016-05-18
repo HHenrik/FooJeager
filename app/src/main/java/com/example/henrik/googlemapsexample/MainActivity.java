@@ -94,12 +94,14 @@ public class MainActivity extends FragmentActivity implements LocationListener {
             GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
                 @Override
                 public void onMyLocationChange(Location location) {
+                    DataStorage.getInstance().setUserPostion(new LatLng(location.getLatitude(),location.getLongitude()));
                     //   map.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Här är du"));
                     //LatLng loc = new LatLng (location.getLatitude(), location.getLongitude());   Denna lösning zoomar inte in och tvingar inte heller inzoomning
                     //map.animateCamera(CameraUpdateFactory.newCameraPosition(map.getCameraPosition()));
                     //location.getLatitude()+           location.getLongitude()
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).bearing(90).tilt(35).build();
                     map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    DataStorage.getInstance().setUserPositionSupport(true);
                 }
             };
             map.setOnMyLocationChangeListener(myLocationChangeListener);
@@ -108,11 +110,25 @@ public class MainActivity extends FragmentActivity implements LocationListener {
         map.setOnInfoWindowClickListener( //När man trycker på texten så ska activty eller fragment öppnas med information om den restaurangen
                 new GoogleMap.OnInfoWindowClickListener(){
                     public void onInfoWindowClick(Marker marker){
-                 DataStorage.getInstance().setRestaurantsList(restaurantsList);
+
+                        for(int i=0;i<restaurantsList.size();i++){
+                            if(restaurantsList.get(i).getName().equals(marker.getTitle())){
+                                restaurantDetailHTML = "https://maps.googleapis.com/maps/api/place/details/json?placeid="+restaurantsList.get(i).getId()+"&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE";
+                                savedObjectId = i;
+                            }
+                        }
+                        new GetRestaurantData().execute(restaurantDetailHTML);
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        DataStorage.getInstance().setRestaurantsList(restaurantsList);
                         Log.d("infoClick","openAc");
                         Intent intent = new Intent(MainActivity.this, RestaurantActivity.class);
-                       Bundle bundle = new Bundle();
-                       bundle.putString("key", marker.getTitle());
+                        Bundle bundle = new Bundle();
+                        bundle.putString("key", marker.getTitle());
                         intent.putExtras(bundle);
                         startActivity(intent);
                     }
@@ -193,7 +209,6 @@ public class MainActivity extends FragmentActivity implements LocationListener {
 
     public class GetRestaurantData extends AsyncTask<String, Void, String> { //Flytta ut till ett eget klassdokument
 
-
         @Override
         protected String doInBackground(String... googlePlacesURL) {
           //  Log.d(googlePlacesURL.toString(),"Se hit");
@@ -261,26 +276,8 @@ public class MainActivity extends FragmentActivity implements LocationListener {
                 }
             }
             if(restaurantDetail == false) {
-                if(doneSettingUpForParse){
                     parseRestaurantDetails(result);
                 }
-                else{
-//                    for(int i=0;i<restaurantsList.size();i++){ //Om hämta details för alla så kommer det att behövas göras en sökning för varje. Har ju bara 1000 sökningar så kan bli problem...  //Nurvarande bara för First Hotel Christian IV
-                        doneSettingUpForParse = true;
-                        restaurantDetail = false;
-                        restaurantDetailHTML = "https://maps.googleapis.com/maps/api/place/details/json?placeid="+restaurantsList.get(0).getId()+"&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE";
-                        //restaurantsList.get(i).getId()
-                        savedObjectId = 0;
-                        new GetRestaurantData().execute(restaurantDetailHTML);
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-  //                      }
-                    }
-                }
-
-            }
                 DataStorage.getInstance().setPlacedLoaded(true);
             }
         }
@@ -352,12 +349,14 @@ public class MainActivity extends FragmentActivity implements LocationListener {
                             Log.d(restaurantName, "PlaceName");
 
                             Restaurants restaurants = new Restaurants();
+
                             restaurants.setGoogleRating(jsonObjectRestaurant.getString("rating"));
                             restaurants.setName(jsonObjectRestaurant.getString("name"));
                             // restaurants.setOpen_now(placeObject.getString("open_now"))
-                            restaurants.setPosition(restaurantLocation.toString());
+                            restaurants.setPosition(restaurantLocation);
                             restaurants.setVicinity(restaurantVicinity);
                             restaurants.setId(jsonObjectRestaurant.getString("place_id"));
+                            restaurants.setPriceLevel("price_level");
 
 
                             //restaurants.setPhoneNumber(jsonObjectRestaurant.getInt("formatted_phone_number"));

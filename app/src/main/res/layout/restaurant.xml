@@ -38,7 +38,8 @@
         android:id="@+id/directionButton"
         android:layout_alignTop="@+id/callButton"
         android:layout_alignLeft="@+id/ratingBar"
-        android:layout_alignStart="@+id/ratingBar" />
+        android:layout_alignStart="@+id/ratingBar"
+        android:onClick="gpsButton" />
 
     <ImageButton
         android:layout_width="wrap_content"

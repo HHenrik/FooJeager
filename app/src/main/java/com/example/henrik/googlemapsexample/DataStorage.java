@@ -1,5 +1,7 @@
 package com.example.henrik.googlemapsexample;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 /**
@@ -10,6 +12,8 @@ public class DataStorage {
     private ArrayList<Restaurants> restaurantsList = new ArrayList();
     private boolean isPlacedLoaded = false;
     private String activeWebLink;
+    private LatLng userPostion;
+    private boolean userPositionSupport = false;
     private DataStorage(){
 
     }
@@ -44,5 +48,21 @@ public class DataStorage {
 
     public void setActiveWebLink(String activeWebLink) {
         this.activeWebLink = activeWebLink;
+    }
+
+    public LatLng getUserPostion() {
+        return userPostion;
+    }
+
+    public void setUserPostion(LatLng userPostion) {
+        this.userPostion = userPostion;
+    }
+
+    public boolean isUserPositionSupport() {
+        return userPositionSupport;
+    }
+
+    public void setUserPositionSupport(boolean userPositionSupport) {
+        this.userPositionSupport = userPositionSupport;
     }
 }

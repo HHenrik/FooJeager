@@ -10,8 +10,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by Henrik on 2016-05-11.
@@ -21,6 +25,8 @@ import java.util.ArrayList;
 public class RestaurantActivity extends AppCompatActivity {
     private ArrayList <Restaurants> restaurantsList = new ArrayList();
     private String restaurantPhoneNumber;
+    private LatLng restaurantPostion;
+    private String restaurantName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +40,7 @@ public class RestaurantActivity extends AppCompatActivity {
     }
     private void setDataOnScreen(Context context, TextView infoView) {
         Bundle bundle = getIntent().getExtras();
-        String restaurantName = "";
+        restaurantName = "";
         if (bundle != null) {
             restaurantName = bundle.getString("key");
             Log.d(restaurantName,"ss");
@@ -50,6 +56,7 @@ public class RestaurantActivity extends AppCompatActivity {
           //  Log.d(DataStorage.getInstance().getRestaurantsList().get(i).getName(),"Loop");
             if (restaurantsList.get(i).getName().equals(restName)) {
                googleRating.setRating(Float.parseFloat(restaurantsList.get(i).getGoogleRating()));
+                restaurantPostion = restaurantsList.get(i).getPosition();
                 //Log.d(DataStorage.getInstance().getRestaurantsList().get(i).getPhoneNumber(),"Git Gud");
                 restaurantPhoneNumber = restaurantsList.get(i).getPhoneNumber();
                DataStorage.getInstance().setActiveWebLink(restaurantsList.get(i).getWebsiteLink());
@@ -66,14 +73,14 @@ public class RestaurantActivity extends AppCompatActivity {
         }
     }
     private void createYourFragment(Fragment fragmentName){
-        if(DataStorage.getInstance().getActiveWebLink()!="null") {
+        if(DataStorage.getInstance().getActiveWebLink()!=null) {
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
             transaction.replace(R.id.restaurant_view, fragmentName);
             transaction.commit();
         }
         else {
-            //Något meddelande
+            Toast.makeText(getApplicationContext(), "Restaurant has no phone number", Toast.LENGTH_SHORT).show();
         }
     }
     public void webPageButton(View v){
@@ -82,10 +89,22 @@ public class RestaurantActivity extends AppCompatActivity {
             createYourFragment(fragment);
         }
         else {
-            //Något meddelande
+            Toast.makeText(getApplicationContext(), "Restaurant has no website", Toast.LENGTH_SHORT).show();
         }
     }
-
+    public void gpsButton(View v){
+        LatLng latLng;
+        if(DataStorage.getInstance().isUserPositionSupport()){
+            latLng = DataStorage.getInstance().getUserPostion();
+        }
+        else{
+            latLng = new LatLng(56.0333333,14.1333333);  //Kordinater för Kristianstad. Om det ingen user position.
+        }
+        String googleDirectionURL = String.format(Locale.ENGLISH, "http://maps.google.com/maps?saddr=%f,%f(%s)&daddr=%f,%f (%s)", latLng.latitude, latLng.longitude, "Your Position", restaurantPostion.latitude, restaurantPostion.longitude, restaurantName);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(googleDirectionURL));
+        intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+        startActivity(intent);
+    }
 
 }
 
