@@ -9,11 +9,13 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Name"
         android:id="@+id/userName"
-        android:layout_toLeftOf="@+id/ratingBar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textSize="30dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:layout_toLeftOf="@+id/ratingBar"
+        android:layout_toStartOf="@+id/ratingBar" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,7 +26,8 @@
         android:layout_below="@+id/userName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:textColor="#ffffff" />
 
     <RatingBar
         android:layout_width="wrap_content"
@@ -34,7 +37,9 @@
         android:layout_gravity="center_vertical"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" /><![CDATA[
+        android:layout_alignParentEnd="true"
+        android:progressTint="#176dd7"
+        android:rating="5" /><![CDATA[
 
     />
 

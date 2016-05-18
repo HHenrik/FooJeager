@@ -44,7 +44,8 @@
         <activity android:name=".MainMenu" />
         <activity android:name=".RestaurantActivity" />
         <activity android:name=".ReviewViewer" />
-        <activity android:name=".Activity_FilterMenu"></activity>
+        <activity android:name=".Activity_FilterMenu" />
+        <activity android:name=".Activity_UserProfile"></activity>
     </application>
 
 </manifest>
