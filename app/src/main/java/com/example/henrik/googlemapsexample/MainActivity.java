@@ -295,6 +295,32 @@ public class MainActivity extends FragmentActivity implements LocationListener {
                 restaurantsList.get(savedObjectId).setPhoneNumber(jObjectResult.getString("formatted_phone_number"));
                 restaurantsList.get(savedObjectId).setWebsiteLink(jObjectResult.getString("website"));
 
+                JSONArray reviews = jObjectResult.getJSONArray("reviews");
+                for(int i=0;i<reviews.length();i++){
+                    JSONObject reviewIndex = reviews.getJSONObject(i);
+                    ReviewObject restaurantReviews = new ReviewObject(Float.parseFloat(reviewIndex.getString("rating")),reviewIndex.getString("author_name"),reviewIndex.getString("text"));
+                    restaurantsList.get(savedObjectId).getReviews().set(i,restaurantReviews);
+                }
+              /*  JSONObject jan = reviews.getJSONObject(0);
+
+                String name = jan.getString("author_name");
+                String text = jan.getString("text");
+                String grade = jan.getString("rating");
+                Log.d(name,"Thomas");
+                Log.d(text,"Thomas");
+                Log.d(grade,"Thomas");
+*/
+                //ArrayList <String> ove = new ArrayList();
+
+               // JSONArray sven;
+               // sven = jObjectResult.getJSONArray("reviews");
+               // String Yngve = sven.getString(0);
+                //Log.d(Yngve.toString(),"HassanLassan");
+               // System.out.print(Yngve+"HassanLassan");
+
+
+
+
             } catch (JSONException e) {
             } catch (Exception e) {
             }
@@ -355,6 +381,8 @@ public class MainActivity extends FragmentActivity implements LocationListener {
                             restaurants.setVicinity(restaurantVicinity);
                             restaurants.setId(jsonObjectRestaurant.getString("place_id"));
                             restaurants.setPriceLevel("price_level");
+
+
 
 
                             //restaurants.setPhoneNumber(jsonObjectRestaurant.getInt("formatted_phone_number"));

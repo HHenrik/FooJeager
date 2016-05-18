@@ -3,6 +3,8 @@ package com.example.henrik.googlemapsexample;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.ArrayList;
+
 /**
  * Created by Henrik on 2016-05-06.
  */
@@ -17,6 +19,8 @@ public class Restaurants {
     private String id;
     private String websiteLink;
     private String priceLevel;
+    private ArrayList <ReviewObject> reviews = new ArrayList();;
+
 
 
     public Marker getMarker() {
@@ -101,5 +105,13 @@ public class Restaurants {
 
     public void setPriceLevel(String priceLevel) {
         this.priceLevel = priceLevel;
+    }
+
+    public ArrayList getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(ArrayList reviews) {
+        this.reviews = reviews;
     }
 }

@@ -65,17 +65,35 @@ public class RestaurantActivity extends AppCompatActivity {
         }
 
 
-            
+
             RatingBar appUserReviews;
             appUserReviews = (RatingBar) findViewById(R.id.appUserReviews);
             appUserReviews.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    Intent intent = new Intent(RestaurantActivity.this, ReviewViewer.class);
-                    startActivity(intent);
+                    DataStorage.getInstance().setReviewType(true);
+                    int action = event.getActionMasked();
+                    if (action == MotionEvent.ACTION_DOWN) {
+                        Intent intent = new Intent(RestaurantActivity.this, ReviewViewer.class);
+                        startActivity(intent);
+                    }
                     return true;
                 }
             });
+
+        googleRating.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                DataStorage.getInstance().setReviewType(false);
+                int action = event.getActionMasked();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    Intent intent = new Intent(RestaurantActivity.this, ReviewViewer.class);
+                    startActivity(intent);
+                }
+                return true;
+            }
+        });
+
         }
 
     public void call(View v){

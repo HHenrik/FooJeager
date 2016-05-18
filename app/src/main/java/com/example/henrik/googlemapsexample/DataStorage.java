@@ -14,6 +14,7 @@ public class DataStorage {
     private String activeWebLink;
     private LatLng userPostion;
     private boolean userPositionSupport = false;
+    private boolean reviewType;
     private DataStorage(){
 
     }
@@ -64,5 +65,13 @@ public class DataStorage {
 
     public void setUserPositionSupport(boolean userPositionSupport) {
         this.userPositionSupport = userPositionSupport;
+    }
+
+    public boolean isReviewType() {
+        return reviewType;
+    }
+
+    public void setReviewType(boolean reviewType) {
+        this.reviewType = reviewType;
     }
 }
