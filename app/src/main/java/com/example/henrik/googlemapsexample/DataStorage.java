@@ -15,6 +15,7 @@ public class DataStorage {
     private LatLng userPostion;
     private boolean userPositionSupport = false;
     private boolean reviewType;
+    private String activeRestaurant;
     private DataStorage(){
 
     }
@@ -73,5 +74,13 @@ public class DataStorage {
 
     public void setReviewType(boolean reviewType) {
         this.reviewType = reviewType;
+    }
+
+    public String getActiveRestaurant() {
+        return activeRestaurant;
+    }
+
+    public void setActiveRestaurant(String activeRestaurant) {
+        this.activeRestaurant = activeRestaurant;
     }
 }

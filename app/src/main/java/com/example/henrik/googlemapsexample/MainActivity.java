@@ -109,7 +109,7 @@ public class MainActivity extends FragmentActivity implements LocationListener {
         map.setOnInfoWindowClickListener( //När man trycker på texten så ska activty eller fragment öppnas med information om den restaurangen
                 new GoogleMap.OnInfoWindowClickListener(){
                     public void onInfoWindowClick(Marker marker){
-
+                        DataStorage.getInstance().setActiveRestaurant(marker.getTitle());
                         for(int i=0;i<restaurantsList.size();i++){
                             if(restaurantsList.get(i).getName().equals(marker.getTitle())){
                                 restaurantDetailHTML = "https://maps.googleapis.com/maps/api/place/details/json?placeid="+restaurantsList.get(i).getId()+"&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE";
@@ -294,13 +294,14 @@ public class MainActivity extends FragmentActivity implements LocationListener {
 
                 restaurantsList.get(savedObjectId).setPhoneNumber(jObjectResult.getString("formatted_phone_number"));
                 restaurantsList.get(savedObjectId).setWebsiteLink(jObjectResult.getString("website"));
-
+                ArrayList <ReviewObject> reviewArray = new ArrayList();
                 JSONArray reviews = jObjectResult.getJSONArray("reviews");
                 for(int i=0;i<reviews.length();i++){
                     JSONObject reviewIndex = reviews.getJSONObject(i);
                     ReviewObject restaurantReviews = new ReviewObject(Float.parseFloat(reviewIndex.getString("rating")),reviewIndex.getString("author_name"),reviewIndex.getString("text"));
-                    restaurantsList.get(savedObjectId).getReviews().set(i,restaurantReviews);
+                    reviewArray.add(i,restaurantReviews);
                 }
+                DataStorage.getInstance().getRestaurantsList().get(savedObjectId).setReviews(reviewArray);
               /*  JSONObject jan = reviews.getJSONObject(0);
 
                 String name = jan.getString("author_name");
