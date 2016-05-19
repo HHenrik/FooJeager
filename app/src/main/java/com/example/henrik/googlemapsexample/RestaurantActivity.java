@@ -35,6 +35,7 @@ public class RestaurantActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         restaurantID = DataStorage.getInstance().getActiveRestaurant();
         findVaribleOfCertainRestaurant(infoView);
+        //showRestaurantStatusPicture();
     }
 
     private void findVaribleOfCertainRestaurant(TextView infoView) {
@@ -115,6 +116,17 @@ public class RestaurantActivity extends AppCompatActivity {
         intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
         startActivity(intent);
     }
+    /*private void showRestaurantStatusPicture(){
+        if(restaurantList.get(restaurantID).getOpenNow()){
+            ImageView img= (ImageView) findViewById(R.id.openView);
+            img.setImageResource(R.drawable.closed);
+        }
+        else{
+            ImageView img= (ImageView) findViewById(R.id.openView);
+            img.setImageResource(R.drawable.open);
+        }
+
+    }*/
 
 
 }
