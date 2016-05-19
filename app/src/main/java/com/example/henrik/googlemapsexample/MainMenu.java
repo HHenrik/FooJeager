@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.provider.Settings.Secure;
 
 /**
  * Created by Henrik on 2016-05-03.
@@ -14,7 +15,6 @@ public class MainMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
-
     }
 
     public void buttonClicked(View view) {
@@ -30,8 +30,8 @@ public class MainMenu extends AppCompatActivity {
                 //startActivity(intent);
                 break;
             case R.id.profileButton:
-                //intent = new Intent(MainMenu.this, Activity_ProfileView.class);
-                //startActivity(intent);
+                intent = new Intent(MainMenu.this, Activity_UserProfile.class);
+                startActivity(intent);
                 break;
             case R.id.filterButton:
                 intent = new Intent(MainMenu.this, Activity_FilterMenu.class);

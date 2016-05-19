@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.henrik.googlemapsexample.MainActivity"
-    android:background="#eab160">
+    android:background="#107896">
 
     <fragment
         android:id="@+id/map"
@@ -17,7 +17,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="41dp" />
+        android:layout_below="@+id/mainMenuButton"
+        android:layout_marginTop="10dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -40,8 +41,8 @@
 
         android:onClick="mainMenuButton"
         android:src="@drawable/menubutton_45x45"
-        android:layout_marginTop="0dp"
-        android:background="#00ffffff" />
+        android:background="#00ffffff"
+        android:layout_alignTop="@+id/filterButton" />
 
     <ImageButton
         android:layout_width="wrap_content"

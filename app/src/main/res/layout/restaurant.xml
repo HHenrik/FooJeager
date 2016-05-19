@@ -2,7 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:id="@+id/restaurant_view"
-    android:background="#ffffff">
+    android:background="#107896">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="200dp"
+        android:id="@+id/bottomLine" />
 
     <RatingBar
         android:layout_width="wrap_content"
@@ -12,7 +19,8 @@
         android:rating="5"
         android:layout_below="@+id/appUserReviews"
         android:layout_alignParentRight="true"
-        android:progressTint="#176dd7" />
+        android:progressTint="#d9f00b"
+        android:layout_marginRight="10dp" />
 
 
     <ImageButton
@@ -65,10 +73,12 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:id="@+id/infoView"
-        android:textColor="#000000"
+        android:textColor="#F4F4F4"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textSize="24dp" />
+        android:textSize="30dp"
+        android:layout_marginTop="10dp"
+        android:textIsSelectable="false" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -95,31 +105,38 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="false"
         android:layout_below="@+id/infoView"
-        android:layout_marginTop="58dp"
-        android:progressTint="#176dd7" />
+        android:layout_marginTop="28dp"
+        android:progressTint="#d9f00b"
+        android:nestedScrollingEnabled="false"
+        android:layout_marginRight="10dp" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Google Rating"
+        android:text="Google Rating:"
         android:id="@+id/textView4"
-        android:textColor="#000000"
+        android:textColor="#F4F4F4"
         android:layout_below="@+id/infoView"
-        android:layout_marginTop="70dp" />
+        android:layout_marginTop="45dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="15dp" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="App User Reviews"
+        android:text="App. user reviews:"
         android:id="@+id/textView5"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
-        android:textColor="#000000"
+        android:textColor="#F4F4F4"
         android:layout_below="@+id/textView4"
-        android:layout_marginTop="28dp"
-        android:layout_alignRight="@+id/textView4"
-        android:layout_alignEnd="@+id/textView4" />
+        android:layout_marginTop="29dp"
+        android:layout_toLeftOf="@+id/infoView"
+        android:layout_toStartOf="@+id/infoView"
+        android:textSize="15dp"
+        android:textIsSelectable="false"
+        android:layout_marginLeft="10dp" />
 
 </RelativeLayout>
