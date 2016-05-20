@@ -369,7 +369,7 @@ public class MainActivity extends FragmentActivity implements LocationListener {
             JSONArray reviews = jObjectResult.getJSONArray("reviews");
             for (int i = 0; i < reviews.length(); i++) {
                 JSONObject reviewIndex = reviews.getJSONObject(i);
-                ReviewObject restaurantReviews = new ReviewObject(Float.parseFloat(reviewIndex.getString("rating")), reviewIndex.getString("author_name"), reviewIndex.getString("text"));
+                ReviewObject restaurantReviews = new ReviewObject(0, Float.parseFloat(reviewIndex.getString("rating")), 0, 0, 0, 0, 0, 0, reviewIndex.getString("author_name"), reviewIndex.getString("text"),"","","");
                 reviewArray.add(i, restaurantReviews);
             }
             DataStorage.getInstance().getRestaurantList().get(savedObjectId).setReviews(reviewArray);

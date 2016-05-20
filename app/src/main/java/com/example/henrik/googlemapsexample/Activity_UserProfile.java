@@ -49,13 +49,13 @@ public class Activity_UserProfile extends AppCompatActivity {
     }
 
     public void setRecentReviews(){
-        recentReviewsList.add(new ReviewObject(3, "Armando", "Mannen i restaurangen vet inte att han snart kommer bli sparkad"));
-        recentReviewsList.add(new ReviewObject(2, "Armando", "Möglig mat men den var ändå ätbar. Otrevlig personal men jag återkommer ändå."));
-        recentReviewsList.add(new ReviewObject(5, "Armando", "Top notch, fan rätt schysst asså! Äter mer än gärna här igen."));
-        recentReviewsList.add(new ReviewObject(4, "Armando", ""));
-        recentReviewsList.add(new ReviewObject(3, "Armando", "Inte mycket att hänga i granen men helt ok"));
-        recentReviewsList.add(new ReviewObject(5, "Armando", "https://www.youtube.com/channel/UCPlV0OpQMImKviSTWHJEDi"));
-        recentReviewsList.add(new ReviewObject(3, "Armando", "Äter hellre på khai mui."));
+        recentReviewsList.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Hans Villius", "Mannen i restaurangen vet inte att han snart kommer bli sparkad", "", "", ""));
+        recentReviewsList.add(new ReviewObject(0, 2, 0, 0, 0, 0, 0, 0, "Kent-Jonas", "Möglig mat men den var ändå ätbar. Otrevlig personal men jag återkommer ändå.", "", "", ""));
+        recentReviewsList.add(new ReviewObject(0, 5, 0, 0, 0, 0, 0, 0, "Lina Åkesson", "Top notch, fan rätt schysst asså! Äter mer än gärna här igen.", "", "", ""));
+        recentReviewsList.add(new ReviewObject(0, 4, 0, 0, 0, 0, 0, 0, "G-son", "", "", "", ""));
+        recentReviewsList.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Gördis 47år", "Inte mycket att hänga i granen men helt ok", "", "", ""));
+        recentReviewsList.add(new ReviewObject(0, 5, 0, 0, 0, 0, 0, 0, "Magic Mike", "https://www.youtube.com/channel/UCPlV0OpQMImKviSTWHJEDi", "", "", ""));
+        recentReviewsList.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Nicklas Brisendal", "Äter hellre på khai mui.", "", "", ""));
 
         final ListView recentReviews = (ListView) findViewById(R.id.recentReviews);
         adapter = new ReviewAdapter(this, recentReviewsList);
