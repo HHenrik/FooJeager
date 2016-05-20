@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -34,6 +38,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends FragmentActivity implements LocationListener {
     private GoogleMap map;
@@ -47,6 +52,14 @@ public class MainActivity extends FragmentActivity implements LocationListener {
     private boolean restaurantDetail = true;
     private String restaurantDetailHTML;
     private int savedObjectId;
+    private SlidingUpPanelLayout restaurantViewSlidePanel;
+    private ArrayList <String> restaurantNames = new ArrayList();
+
+    private int savedArraySize = 0;
+
+    private ListView restaurantViewListView;
+    private List<String> array_list;
+    private int previusClickedID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +77,8 @@ public class MainActivity extends FragmentActivity implements LocationListener {
         prefsEditor.putString("ResturantObjectList", json);
         prefsEditor.commit();
 
-
-
+        restaurantViewSlidePanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        restaurantViewListView = (ListView) findViewById(R.id.restaurantList);
 
       /*  GoogleApiClient mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
@@ -75,6 +88,73 @@ public class MainActivity extends FragmentActivity implements LocationListener {
                 .build();
 */
 
+    }
+    private void zoomMapToMarker(LatLng markerLocation){
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLocation,15));
+        map.animateCamera(CameraUpdateFactory.zoomIn());
+        map.animateCamera(CameraUpdateFactory.zoomTo(15), 3000, null);
+    }
+    private void setRestaurantListView(){
+
+        restaurantViewListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                for(int i=0;i<restaurantList.size();i++){
+                    if(restaurantList.get(i).getName().equals(restaurantNames.get(position))) {
+                            restaurantList.get(i).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                        if (previusClickedID != restaurantList.size()+1) {
+                            restaurantList.get(previusClickedID).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                        }
+                        zoomMapToMarker(restaurantList.get(i).getPosition());
+                        previusClickedID = i;
+                    }
+
+
+                }
+            }
+        });
+        restaurantViewSlidePanel.setScrollableView(restaurantViewListView);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, restaurantNames);
+        restaurantViewListView.setAdapter(arrayAdapter);
+    }
+
+    public void panelListener(){
+
+        restaurantViewSlidePanel.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+
+            // During the transition of expand and collapse onPanelSlide function will be called.
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+
+
+            }
+
+            // Called when secondary layout is dragged up by user
+            @Override
+            public void onPanelExpanded(View panel) {
+
+
+            }
+
+            // Called when secondary layout is dragged down by user
+            @Override
+            public void onPanelCollapsed(View panel) {
+
+
+            }
+
+            @Override
+            public void onPanelAnchored(View panel) {
+
+
+            }
+
+            @Override
+            public void onPanelHidden(View panel) {
+
+
+            }
+        });
     }
 
     private void removeIndividualMarker(String restaurantName) {
@@ -111,7 +191,6 @@ public class MainActivity extends FragmentActivity implements LocationListener {
         map.setOnInfoWindowClickListener( //När man trycker på texten så ska activty eller fragment öppnas med information om den restaurangen
                 new GoogleMap.OnInfoWindowClickListener() {
                     public void onInfoWindowClick(Marker marker) {
-
                         for (int i = 0; i < restaurantList.size(); i++) {
                             if (restaurantList.get(i).getName().equals(marker.getTitle())) {
                                 restaurantDetailHTML = "https://maps.googleapis.com/maps/api/place/details/json?placeid=" + restaurantList.get(i).getId() + "&key=AIzaSyBwnl9UME858omHSWaF4U7LPKep6-ow1dE";
@@ -243,6 +322,9 @@ public class MainActivity extends FragmentActivity implements LocationListener {
 
                 parseJsonData(result);
                 placeAllRestaurantMarkersOnMap();
+                for (int i = savedArraySize; i < restaurantList.size(); i++) {  //Flyttat hit pga måste köras efter att vi fått hem samtliga pins
+                    restaurantList.get(i).setMarker(resturantMarkers[i]);
+                }
                 try {
                     Thread.sleep(1200);//värdet är inte optimerat för tillfället. Kan säkert vara lägre. Men behövs annars blir det skit av det...
                 } catch (InterruptedException e) {
@@ -252,14 +334,16 @@ public class MainActivity extends FragmentActivity implements LocationListener {
 
                 if (oncePage1) {
                     oncePage1 = false;
+                    savedArraySize = restaurantList.size(); //Felet är att de nya restaurangerna inte får fungerande markeringar eftersom börjar från start. därför krash
                     new GetRestaurantData().execute(nextPageTokenURL);
                 } else {
-                    for (int i = 0; i < restaurantList.size(); i++) {  //Flyttat hit pga måste köras efter att vi fått hem samtliga pins
-                        restaurantList.get(i).setMarker(resturantMarkers[i]);
-                    }
                     restaurantDetail = false;
                 }
             }
+
+            previusClickedID=restaurantList.size()+1;
+            setRestaurantListView();
+            panelListener();
             if (restaurantDetail == false) {
                 parseRestaurantDetails(result);
             }
@@ -348,6 +432,7 @@ public class MainActivity extends FragmentActivity implements LocationListener {
 
                     restaurant.setGoogleRating(jsonObjectRestaurant.getString("rating"));
                     restaurant.setName(jsonObjectRestaurant.getString("name"));
+                    restaurantNames.add(jsonObjectRestaurant.getString("name"));
                     restaurant.setPosition(restaurantLocation);
                     restaurant.setVicinity(restaurantVicinity);
                     restaurant.setId(jsonObjectRestaurant.getString("place_id"));
@@ -362,8 +447,11 @@ public class MainActivity extends FragmentActivity implements LocationListener {
                     exception.printStackTrace();
                 }
                 if (valueIsMissing) {
-                    resturantsMarkerOptions[p] = null;
-                } else {
+                    resturantsMarkerOptions[p] = null;          //Det är denna som förstör. Tas den bort så kommer några till som inte fungerar
+                    Log.d(restaurantList.get(restaurantList.size()-1).getName(),"Dessa har trasiga markeringar"); //Hur kan de komma ut på kartan när de inte får nån markeroptions?
+                }
+
+                else {
                     Log.d("Placing marker", "PlaceName");
                     resturantsMarkerOptions[p] = new MarkerOptions().position(restaurantLocation).title(restaurantName).icon
                             (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).snippet(restaurantVicinity);//Vi kan ha olika ikoner beroende på typ av restaurang eller nått sånt.
@@ -390,11 +478,17 @@ public class MainActivity extends FragmentActivity implements LocationListener {
     }
 
     private void placeAllRestaurantMarkersOnMap() {
+        int counter = 0;
         if (resturantsMarkerOptions != null && resturantMarkers != null) {
-            for (int i = 0; i < resturantsMarkerOptions.length && i < resturantMarkers.length; i++) {
+            for (int i = 0; i < resturantsMarkerOptions.length; i++) {
                 if (resturantsMarkerOptions[i] != null) {
-                    resturantMarkers[i] = map.addMarker(resturantsMarkerOptions[i]);
+                    resturantMarkers[savedArraySize+counter] = map.addMarker(resturantsMarkerOptions[i]);
                     Log.d("Setting marker", "PlaceName");
+                    counter++; //Counter ta bort? Ingen skillnad?
+                }
+                else{
+                    counter--;
+                    Log.d("nullvalue", "nullder");
                 }
 
             }
@@ -417,7 +511,7 @@ public class MainActivity extends FragmentActivity implements LocationListener {
         //      else{
         // restaurantList.get(i).getMarker().setVisible(true);
     }
-
+    //SlidingUpPanel of umano
 }
 
 

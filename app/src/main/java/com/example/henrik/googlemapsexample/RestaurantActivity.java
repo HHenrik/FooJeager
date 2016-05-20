@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RatingBar;
@@ -116,6 +117,21 @@ public class RestaurantActivity extends AppCompatActivity {
         intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
         startActivity(intent);
     }
+
+    public void openingTimesButton(View v) {
+        if (restaurantList.get(restaurantID).getOpenHoursArray() != null) {
+            Log.d("clicked", "has");
+            RestaurantOpeningTimes_fragment fragment = new RestaurantOpeningTimes_fragment();
+            createYourFragment(fragment);
+        } else {
+            //Dölj knappen eller toast
+        }
+
+    }
+
+
+
+
     /*private void showRestaurantStatusPicture(){
         if(restaurantList.get(restaurantID).getOpenNow()){
             ImageView img= (ImageView) findViewById(R.id.openView);

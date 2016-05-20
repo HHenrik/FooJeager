@@ -139,4 +139,13 @@
         android:textIsSelectable="false"
         android:layout_marginLeft="10dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/testOpenerRestOpenTimes"
+        android:onClick="openingTimesButton"
+        android:layout_below="@+id/webSiteButton"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
