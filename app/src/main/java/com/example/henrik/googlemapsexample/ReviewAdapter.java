@@ -30,7 +30,7 @@ public class ReviewAdapter extends ArrayAdapter<ReviewObject> {
 
         user.setText(getItem(position).getUser());
         text.setText(getItem(position).getText());
-        score.setRating(getItem(position).getScore());
+        score.setRating(getItem(position).getAverageScore());
 
         return customView;
     }

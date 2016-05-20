@@ -21,13 +21,13 @@ public class ReviewViewer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reviews);
         if(DataStorage.getInstance().isReviewType()) {
-            list.add(new ReviewObject(3, "Hans Villius", "Mannen i restaurangen vet inte att han snart kommer bli sparkad"));
-            list.add(new ReviewObject(2, "Kent-Jonas", "Möglig mat men den var ändå ätbar. Otrevlig personal men jag återkommer ändå."));
-            list.add(new ReviewObject(5, "Lina Åkesson", "Top notch, fan rätt schysst asså! Äter mer än gärna här igen."));
-            list.add(new ReviewObject(4, "G-son", ""));
-            list.add(new ReviewObject(3, "Gördis 47år", "Inte mycket att hänga i granen men helt ok"));
-            list.add(new ReviewObject(5, "Magic Mike", "https://www.youtube.com/channel/UCPlV0OpQMImKviSTWHJEDi"));
-            list.add(new ReviewObject(3, "Nicklas Brisendal", "Äter hellre på khai mui."));
+            list.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Hans Villius", "Mannen i restaurangen vet inte att han snart kommer bli sparkad", "", "", ""));
+            list.add(new ReviewObject(0, 2, 0, 0, 0, 0, 0, 0, "Kent-Jonas", "Möglig mat men den var ändå ätbar. Otrevlig personal men jag återkommer ändå.", "", "", ""));
+            list.add(new ReviewObject(0, 5, 0, 0, 0, 0, 0, 0, "Lina Åkesson", "Top notch, fan rätt schysst asså! Äter mer än gärna här igen.", "", "", ""));
+            list.add(new ReviewObject(0, 4, 0, 0, 0, 0, 0, 0, "G-son", "", "", "", ""));
+            list.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Gördis 47år", "Inte mycket att hänga i granen men helt ok", "", "", ""));
+            list.add(new ReviewObject(0, 5, 0, 0, 0, 0, 0, 0, "Magic Mike", "https://www.youtube.com/channel/UCPlV0OpQMImKviSTWHJEDi", "", "", ""));
+            list.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Nicklas Brisendal", "Äter hellre på khai mui.", "", "", ""));
         }
         else{
                 list = DataStorage.getInstance().getRestaurantList().get(DataStorage.getInstance().getActiveRestaurant()).getReviews();
