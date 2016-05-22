@@ -3,6 +3,10 @@ package com.example.henrik.googlemapsexample;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
@@ -38,9 +42,10 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
+import java.util.Random;
 
-public class MainActivity extends FragmentActivity implements LocationListener {
+public class MainActivity extends FragmentActivity implements LocationListener , SensorEventListener {
     private GoogleMap map;
     private boolean mapTypeChanger = true;
     private Marker[] resturantMarkers;
@@ -55,10 +60,18 @@ public class MainActivity extends FragmentActivity implements LocationListener {
     private SlidingUpPanelLayout restaurantViewSlidePanel;
     private ArrayList <String> restaurantNames = new ArrayList();
 
+
+    private Sensor sensor;
+    private SensorManager sensorManager;
+
+
+    private float currentAccelerationValue = SensorManager.GRAVITY_EARTH;
+    private float previousAccelerationValue = SensorManager.GRAVITY_EARTH;
+    private float accelerationValue = 0.00f;
+
     private int savedArraySize = 0;
 
     private ListView restaurantViewListView;
-    private List<String> array_list;
     private int previusClickedID;
 
     @Override
@@ -69,6 +82,7 @@ public class MainActivity extends FragmentActivity implements LocationListener {
         setUserLocationOnMap();
 
 
+
         Context context = getApplicationContext();
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
@@ -76,7 +90,7 @@ public class MainActivity extends FragmentActivity implements LocationListener {
         String json = gson.toJson(restaurantList);
         prefsEditor.putString("ResturantObjectList", json);
         prefsEditor.commit();
-
+        setUpAccelometer();
         restaurantViewSlidePanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         restaurantViewListView = (ListView) findViewById(R.id.restaurantList);
 
@@ -89,10 +103,55 @@ public class MainActivity extends FragmentActivity implements LocationListener {
 */
 
     }
+    private void setUpAccelometer() {
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this, sensor, sensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        float xValue = sensorEvent.values[0];
+        float yValue = sensorEvent.values[1];
+        float zValue = sensorEvent.values[2];
+
+        previousAccelerationValue = currentAccelerationValue;
+        currentAccelerationValue = (float) (float) Math.sqrt(xValue * xValue + yValue * yValue + zValue * zValue);
+        float accelerationValueChange = currentAccelerationValue - previousAccelerationValue;
+        accelerationValue = accelerationValue * 0.9f + accelerationValueChange;
+        if (accelerationValue > 15) {
+            randomNumberPrintJustForTest();
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+    protected void onResume() { //Tydligen tar listeners energi o cpukraft. Därför onResume samt onPause.
+        super.onResume();
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
+    private void randomNumberPrintJustForTest() {
+        int max = 10;
+        int min = 5;
+        int diff = max - min;
+        Random rn = new Random();
+        int i = rn.nextInt(diff + 1);
+        i += min;
+        Log.d(Integer.toString(i),"random number");
+    }
     private void zoomMapToMarker(LatLng markerLocation){
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLocation,15));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLocation,18));
         map.animateCamera(CameraUpdateFactory.zoomIn());
-        map.animateCamera(CameraUpdateFactory.zoomTo(15), 3000, null);
+        map.animateCamera(CameraUpdateFactory.zoomTo(18), 3000, null);
     }
     private void setRestaurantListView(){
 
@@ -107,6 +166,7 @@ public class MainActivity extends FragmentActivity implements LocationListener {
                         }
                         zoomMapToMarker(restaurantList.get(i).getPosition());
                         previusClickedID = i;
+                        Log.d(restaurantList.get(i).getMarker().getTitle(),"Lookd");
                     }
 
 
@@ -115,6 +175,12 @@ public class MainActivity extends FragmentActivity implements LocationListener {
         });
         restaurantViewSlidePanel.setScrollableView(restaurantViewListView);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, restaurantNames);
+        arrayAdapter.sort(new Comparator<String>() {
+            @Override
+            public int compare(String leftValue, String rightValue) {
+                return leftValue.compareTo(rightValue);
+            }
+        });
         restaurantViewListView.setAdapter(arrayAdapter);
     }
 
@@ -322,7 +388,15 @@ public class MainActivity extends FragmentActivity implements LocationListener {
 
                 parseJsonData(result);
                 placeAllRestaurantMarkersOnMap();
+
                 for (int i = savedArraySize; i < restaurantList.size(); i++) {  //Flyttat hit pga måste köras efter att vi fått hem samtliga pins
+               /*     if(resturantMarkers[i]==null){
+                        Log.d("Null value","NullvalueonPost");
+                        Log.d(restaurantList.get(i).getName(),"NullvalueonPost");
+                        restaurantList.get(i).setMarker(restaurantList.get(0).getMarker());
+
+                    }
+                    else*/
                     restaurantList.get(i).setMarker(resturantMarkers[i]);
                 }
                 try {
@@ -375,11 +449,6 @@ public class MainActivity extends FragmentActivity implements LocationListener {
             DataStorage.getInstance().getRestaurantList().get(savedObjectId).setReviews(reviewArray);
 
             JSONObject openHours = jObjectResult.getJSONObject("opening_hours");
-            restaurantList.get(savedObjectId).setOpen_now(openHours.getString("open_now"));
-
-
-            Log.d(Boolean.toString(restaurantList.get(savedObjectId).getOpenNow()),"open_now");
-
             JSONArray openHoursJSONArray = openHours.getJSONArray("weekday_text");
             String[] openHourArray = new String[7];
             for(int i=0;i<openHoursJSONArray.length();i++){
@@ -437,7 +506,12 @@ public class MainActivity extends FragmentActivity implements LocationListener {
                     restaurant.setVicinity(restaurantVicinity);
                     restaurant.setId(jsonObjectRestaurant.getString("place_id"));
                     restaurant.setPriceLevel("price_level");
+                    Log.d(jsonObjectRestaurant.getString("name"),"RestaurantName");
+                    Log.d(jsonObjectRestaurant.getString("place_id"),"RestaurantName");
 
+                    //JSONObject openHours = jsonObjectRestaurant.getJSONObject("opening_hours");
+                    //restaurant.setOpenNow(openHours.getBoolean("open_now"));
+                    //Log.d(Boolean.toString(openHours.getBoolean("open_now")),"Is open now?");
 
                     restaurantList.add(restaurant);
 
@@ -446,16 +520,16 @@ public class MainActivity extends FragmentActivity implements LocationListener {
                     valueIsMissing = true;
                     exception.printStackTrace();
                 }
-                if (valueIsMissing) {
-                    resturantsMarkerOptions[p] = null;          //Det är denna som förstör. Tas den bort så kommer några till som inte fungerar
-                    Log.d(restaurantList.get(restaurantList.size()-1).getName(),"Dessa har trasiga markeringar"); //Hur kan de komma ut på kartan när de inte får nån markeroptions?
-                }
+            //    if (valueIsMissing) {
+              //      resturantsMarkerOptions[p] = null;          //Det är denna som förstör. Tas den bort så kommer några till som inte fungerar
+                //    Log.d(restaurantList.get(restaurantList.size()-1).getName(),"Dessa har trasiga markeringar"); //Hur kan de komma ut på kartan när de inte får nån markeroptions?
+                //}
 
-                else {
+                //else {
                     Log.d("Placing marker", "PlaceName");
                     resturantsMarkerOptions[p] = new MarkerOptions().position(restaurantLocation).title(restaurantName).icon
                             (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).snippet(restaurantVicinity);//Vi kan ha olika ikoner beroende på typ av restaurang eller nått sånt.
-                }
+                //}
                 markerCounter++;
 
 

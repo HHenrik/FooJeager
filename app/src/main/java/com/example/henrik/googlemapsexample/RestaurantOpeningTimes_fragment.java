@@ -19,6 +19,7 @@ public class RestaurantOpeningTimes_fragment extends Fragment {
        setListViewData(v);
         return v;
     }
+
     private void setListViewData(View v){
         ListView openingTimesList = (ListView) v.findViewById(R.id.openingHoursList);
         ArrayAdapter<String> arrayAdapter;

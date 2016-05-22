@@ -95,7 +95,7 @@
         android:id="@+id/isOpenNow"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="45dp" />
+        android:layout_marginBottom="20dp" />
 
     <RatingBar
         android:layout_width="wrap_content"
@@ -147,5 +147,13 @@
         android:onClick="openingTimesButton"
         android:layout_below="@+id/webSiteButton"
         android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/openNow"
+        android:layout_alignLeft="@+id/callButton"
+        android:layout_alignStart="@+id/callButton"
+        android:layout_below="@+id/infoView" />
 
 </RelativeLayout>

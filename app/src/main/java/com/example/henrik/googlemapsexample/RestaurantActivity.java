@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +37,7 @@ public class RestaurantActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         restaurantID = DataStorage.getInstance().getActiveRestaurant();
         findVaribleOfCertainRestaurant(infoView);
-        //showRestaurantStatusPicture();
+        showRestaurantStatusPicture();
     }
 
     private void findVaribleOfCertainRestaurant(TextView infoView) {
@@ -93,7 +94,7 @@ public class RestaurantActivity extends AppCompatActivity {
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.restaurant_view, fragmentName);
-        transaction.commit();
+        transaction.addToBackStack("tag").commit();
     }
 
     public void webPageButton(View v) {
@@ -132,17 +133,17 @@ public class RestaurantActivity extends AppCompatActivity {
 
 
 
-    /*private void showRestaurantStatusPicture(){
+    private void showRestaurantStatusPicture(){
+        ImageView openNowStatus;
+        openNowStatus = (ImageView) findViewById(R.id.openNow);
         if(restaurantList.get(restaurantID).getOpenNow()){
-            ImageView img= (ImageView) findViewById(R.id.openView);
-            img.setImageResource(R.drawable.closed);
+            //openNowStatus.setImageResource(R.drawable.open);
         }
         else{
-            ImageView img= (ImageView) findViewById(R.id.openView);
-            img.setImageResource(R.drawable.open);
+           // openNowStatus.setImageResource(R.drawable.closed);
         }
 
-    }*/
+    }
 
 
 }
