@@ -4,7 +4,6 @@ package com.example.henrik.googlemapsexample.review;
  * Created by Minkan on 2016-05-16.
  */
 public class ReviewObject {
-
     private int reviewId;
     private float averageScore;
     private int staffScore;
@@ -20,7 +19,7 @@ public class ReviewObject {
     private String restaurantId;
 
 
-    public ReviewObject(int reviewId, float averageScore, int staffScore, int affordabilityScore, int ambienceScore, int qualityScore, int dislike, int like, String user, String text, String date, String restaurantId, String deviceId) {
+    public ReviewObject(int reviewId, float averageScore, int staffScore, int affordabilityScore, int ambienceScore, int qualityScore, int dislike, int like, String text, String date, String restaurantId, String deviceId) {
         this.reviewId = reviewId;
         this.averageScore = averageScore;
         this.staffScore = staffScore;
@@ -29,7 +28,6 @@ public class ReviewObject {
         this.qualityScore = qualityScore;
         this.dislike = dislike;
         this.like = like;
-        this.user = user;
         this.text = text;
         this.date = date;
         this.restaurantId = restaurantId;
