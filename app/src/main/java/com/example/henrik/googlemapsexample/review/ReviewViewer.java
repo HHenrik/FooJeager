@@ -1,7 +1,11 @@
 package com.example.henrik.googlemapsexample.review;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -38,10 +42,20 @@ public class ReviewViewer extends AppCompatActivity {
 
 
 
+
+
         final ListView rew = (ListView) findViewById(R.id.listView);
         adapter = new ReviewAdapter(this, list);
 
         rew.setAdapter(adapter);
+
+        rew.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Intent intent = new Intent(ReviewViewer.this, ReviewDetailed.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
