@@ -1,4 +1,4 @@
-package com.example.henrik.googlemapsexample;
+package com.example.henrik.googlemapsexample.globalclasses;
 
 import android.app.Activity;
 import android.hardware.Sensor;
@@ -7,6 +7,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.example.henrik.googlemapsexample.R;
 
 import java.util.Random;
 

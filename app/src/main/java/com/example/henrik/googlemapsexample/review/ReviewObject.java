@@ -1,4 +1,4 @@
-package com.example.henrik.googlemapsexample;
+package com.example.henrik.googlemapsexample.review;
 
 /**
  * Created by Minkan on 2016-05-16.

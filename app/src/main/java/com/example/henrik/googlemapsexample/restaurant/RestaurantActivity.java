@@ -1,4 +1,4 @@
-package com.example.henrik.googlemapsexample;
+package com.example.henrik.googlemapsexample.restaurant;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
+import com.example.henrik.googlemapsexample.R;
+import com.example.henrik.googlemapsexample.review.ReviewViewer;
+import com.example.henrik.googlemapsexample.fragments.Website_fragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;

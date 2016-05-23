@@ -1,4 +1,4 @@
-package com.example.henrik.googlemapsexample;
+package com.example.henrik.googlemapsexample.userprofile;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -14,6 +14,10 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.henrik.googlemapsexample.R;
+import com.example.henrik.googlemapsexample.review.ReviewAdapter;
+import com.example.henrik.googlemapsexample.review.ReviewObject;
 
 import java.util.ArrayList;
 

@@ -1,9 +1,12 @@
-package com.example.henrik.googlemapsexample;
+package com.example.henrik.googlemapsexample.review;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+
+import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
+import com.example.henrik.googlemapsexample.R;
 
 import java.util.ArrayList;
 

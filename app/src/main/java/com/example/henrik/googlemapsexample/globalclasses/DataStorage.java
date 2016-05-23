@@ -1,5 +1,6 @@
-package com.example.henrik.googlemapsexample;
+package com.example.henrik.googlemapsexample.globalclasses;
 
+import com.example.henrik.googlemapsexample.restaurant.Restaurant;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;

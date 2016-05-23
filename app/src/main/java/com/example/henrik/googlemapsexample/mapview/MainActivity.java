@@ -1,4 +1,4 @@
-package com.example.henrik.googlemapsexample;
+package com.example.henrik.googlemapsexample.mapview;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.henrik.googlemapsexample.filtermenu.Activity_FilterMenu;
+import com.example.henrik.googlemapsexample.mainmenu.MainMenu;
+import com.example.henrik.googlemapsexample.R;
+import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
+import com.example.henrik.googlemapsexample.restaurant.Restaurant;
+import com.example.henrik.googlemapsexample.restaurant.RestaurantActivity;
+import com.example.henrik.googlemapsexample.review.ReviewObject;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;

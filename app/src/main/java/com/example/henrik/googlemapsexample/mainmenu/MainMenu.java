@@ -1,11 +1,13 @@
-package com.example.henrik.googlemapsexample;
+package com.example.henrik.googlemapsexample.mainmenu;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.provider.Settings.Secure;
+
+import com.example.henrik.googlemapsexample.filtermenu.Activity_FilterMenu;
+import com.example.henrik.googlemapsexample.R;
+import com.example.henrik.googlemapsexample.userprofile.Activity_UserProfile;
 
 /**
  * Created by Henrik on 2016-05-03.

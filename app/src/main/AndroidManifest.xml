@@ -34,18 +34,18 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDBSnmGGnCQCju4hwqHXCVWYGgqdAHw3i4" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".mapview.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenu" />
-        <activity android:name=".RestaurantActivity" />
-        <activity android:name=".ReviewViewer" />
-        <activity android:name=".Activity_FilterMenu" />
-        <activity android:name=".Activity_UserProfile"></activity>
+        <activity android:name=".mainmenu.MainMenu" />
+        <activity android:name=".restaurant.RestaurantActivity" />
+        <activity android:name=".review.ReviewViewer" />
+        <activity android:name=".filtermenu.Activity_FilterMenu" />
+        <activity android:name=".userprofile.Activity_UserProfile"></activity>
     </application>
 
 </manifest>
