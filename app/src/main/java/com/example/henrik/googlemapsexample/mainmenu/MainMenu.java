@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.example.henrik.googlemapsexample.favourites.Activity_Favourites;
 import com.example.henrik.googlemapsexample.filtermenu.Activity_FilterMenu;
 import com.example.henrik.googlemapsexample.R;
 import com.example.henrik.googlemapsexample.userprofile.Activity_UserProfile;
@@ -24,8 +25,8 @@ public class MainMenu extends AppCompatActivity {
 
         switch (view.getId()) {
             case R.id.favouritesButton:
-                //intent = new Intent(MainMenu.this, Activity_FavouritesView.class);
-                //startActivity(intent);
+                intent = new Intent(MainMenu.this, Activity_Favourites.class);
+                startActivity(intent);
                 break;
             case R.id.storedMenuButton:
                 //intent = new Intent(MainMenu.this, Activity_StoredMenuView.class);

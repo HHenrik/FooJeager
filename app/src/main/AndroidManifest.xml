@@ -45,7 +45,8 @@
         <activity android:name=".restaurant.RestaurantActivity" />
         <activity android:name=".review.ReviewViewer" />
         <activity android:name=".filtermenu.Activity_FilterMenu" />
-        <activity android:name=".userprofile.Activity_UserProfile"></activity>
+        <activity android:name=".userprofile.Activity_UserProfile" />
+        <activity android:name=".favourites.Activity_Favourites"></activity>
     </application>
 
 </manifest>
