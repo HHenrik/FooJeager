@@ -135,7 +135,7 @@ public class DatabaseHandler {
         queue.add(request);
     }
 
-    public void addUser(String device_id, String name){
+    public void addUser(String device_id, String name, final callbackAddUserComplete callback){
         String USER_URL = "http://" + IP + "/android_connect/adduser.php";  //192.168.1.83    194.47.40.206
         final String DEVICE_ID = "device_id";
         final String NAME = "name";
@@ -160,16 +160,20 @@ public class DatabaseHandler {
                 new Response.Listener<JSONObject>() { // the response listener
                     @Override
                     public void onResponse(JSONObject response){
-
+                        callback.onSuccess("");
                     }
                 },
                 new Response.ErrorListener() { // the error listener
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Log.d("","" + error);
                     }
                 });
         queue.add(request);
+    }
+
+    public interface callbackAddUserComplete{
+        void onSuccess(String complete);
     }
 
 
