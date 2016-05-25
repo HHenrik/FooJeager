@@ -175,9 +175,6 @@ public class Activity_UserProfile extends AppCompatActivity {
         recentReviews.setAdapter(adapter);
     }
 
-
-
-
     private void getUserData(String deviceId){
         dbHandler.getUserData(deviceId, new DatabaseHandler.callbackGetUserData() {
             @Override
@@ -194,7 +191,6 @@ public class Activity_UserProfile extends AppCompatActivity {
                 updateLevel(String.valueOf(level));
             }
         });
-
 
     }
 

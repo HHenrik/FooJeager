@@ -28,7 +28,7 @@ public class DatabaseHandler {
 
     //Jocke hemma iP = 192.168.1.83
 
-    String IP = "194.47.32.131";
+    String IP = "194.47.41.188";
 
     public DatabaseHandler(Context context){
         this.context = context;
@@ -167,6 +167,7 @@ public class DatabaseHandler {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("","" + error);
+                        callback.onSuccess("");
                     }
                 });
         queue.add(request);

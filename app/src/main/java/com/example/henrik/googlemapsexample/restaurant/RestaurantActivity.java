@@ -2,8 +2,10 @@ package com.example.henrik.googlemapsexample.restaurant;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
 import com.example.henrik.googlemapsexample.R;
@@ -21,8 +24,22 @@ import com.example.henrik.googlemapsexample.fragments.Website_fragment;
 import com.example.henrik.googlemapsexample.review.WriteReview;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Created by Henrik on 2016-05-11.
@@ -32,7 +49,15 @@ import java.util.Locale;
 public class RestaurantActivity extends AppCompatActivity {
     private ArrayList<Restaurant> restaurantList = new ArrayList();
     private int restaurantID;
+    private ToggleButton favouriteMarked;
 
+    private String SAVED_INFO = "storedAccountSettings";
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+
+    private Set<String> markedFavIds;
+    private int storedAtIndex = -1;
+    private List loadedFavList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +68,32 @@ public class RestaurantActivity extends AppCompatActivity {
         restaurantID = DataStorage.getInstance().getActiveRestaurant();
         findVaribleOfCertainRestaurant(infoView);
         showRestaurantStatusPicture();
+
+        favouriteMarked = (ToggleButton) findViewById(R.id.favouriteButton);
+        preferences = getSharedPreferences(SAVED_INFO, MODE_PRIVATE);
+        editor = preferences.edit();
+
+        //Read favourites from sharedpreferences
+        //Set button toggle if id matches the restaurants id
+
+     //   editor.clear();
+     //   editor.commit();
+
+        markedFavIds = preferences.getStringSet("markedFavs", new HashSet<String>());
+        List loadedFavList = new ArrayList(markedFavIds);
+
+        for(int i = 0; i < loadedFavList.size(); i++) {
+            if (restaurantList.get(restaurantID).getId().equals(loadedFavList.get(i))){
+                Log.d("FAVOURITE FOUND: ", "AT INDEX " + i);
+                storedAtIndex = i;
+                Log.d("STORED INDEX = ", String.valueOf(storedAtIndex));
+                Log.d("FOUND: ", loadedFavList.get(i) + " was " + restaurantList.get(restaurantID).getId());
+                favouriteMarked.setChecked(true);
+                break;
+            }
+        }
+
+
     }
 
     private void findVaribleOfCertainRestaurant(TextView infoView) {
@@ -141,21 +192,76 @@ public class RestaurantActivity extends AppCompatActivity {
 
     }
 
-
-
-
-    private void showRestaurantStatusPicture(){
+    private void showRestaurantStatusPicture() {
         ImageView openNowStatus;
         openNowStatus = (ImageView) findViewById(R.id.openNow);
-        if(restaurantList.get(restaurantID).getOpenNow()){
+        if (restaurantList.get(restaurantID).getOpenNow()) {
             //openNowStatus.setImageResource(R.drawable.open);
-        }
-        else{
-           // openNowStatus.setImageResource(R.drawable.closed);
+        } else {
+            // openNowStatus.setImageResource(R.drawable.closed);
         }
 
     }
 
+    public void onFavouriteClick(View view) {
+        String restName = restaurantList.get(restaurantID).getName();
+        String restId = restaurantList.get(restaurantID).getId();
+
+        if (favouriteMarked.isChecked()) {
+            Log.d("AS FAVOURITE: ", restName);
+            Log.d("AS FAVOURITE: ", restId);
+
+            markedFavIds.add(restId);
+
+            editor.remove("markedFavs");
+            editor.commit();
+
+            editor.putStringSet("markedFavs", markedFavIds);
+            editor.commit();
+
+            Log.d("ADDING....: ", "COMPLETE!");
+
+            Set<String> readFavs = preferences.getStringSet("markedFavs", null);
+            List list = new ArrayList(readFavs);
+            Log.d("PRINT: ", list.toString());
+
+        } else {
+            Log.d("RESTAURANT INFO: ", restName);
+            Log.d("RESTAURANT INFO: ", restId);
+
+            editor.remove("markedFavs");
+            editor.commit();
+
+            loadedFavList.remove(storedAtIndex);
+            Set setToAdd = new HashSet(loadedFavList);
+
+            editor.putStringSet("markedFavs", setToAdd);
+            editor.commit();
+            Log.d("REMOVED INDEX: ", String.valueOf(storedAtIndex));
+
+        }
+
+
+
+        //Check if button is marked or not
+
+        //If not marked:
+        //Add Name and id to file
+        //Append to file
+        //If marked:
+        //READ FULL FILE
+        //Remove name and id from file
+        //Write file
+
+    }
+
+    private void storeFavourites() {
+
+    }
+
+    private String readFavourites() {
+        return "";
+    }
 
 }
 
