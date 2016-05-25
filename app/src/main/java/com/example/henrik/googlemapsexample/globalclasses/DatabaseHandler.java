@@ -360,10 +360,10 @@ public class DatabaseHandler {
     }
 
     public void getRestaurantWithFilter(ArrayList<String> filterList, final callbackGetRestaurantWithFilter callback){
-        String sql = "filter_sort='" + filterList.get(0) + "'";
+        String sql = "filter_sort%=27" + filterList.get(0) + "%27";
         //String sql = "SELECT * FROM restaurant_has_filter WHERE filter_sort='" + filterList.get(0) + "'";
         for(int i = 1; i < filterList.size(); i++) {
-            sql += " OR filter_sort='" + filterList.get(i) + "'";
+            sql += "%20OR%20filter_sort=%27" + filterList.get(i) + "%27";
         }
         Log.d("SQL STRING:", "    dskndadsdqpqåwqååwåwqåq " + sql);
         String USER_URL = "http://" +  IP + "/android_connect/getRestaurantFilter.php?sql=" + sql;

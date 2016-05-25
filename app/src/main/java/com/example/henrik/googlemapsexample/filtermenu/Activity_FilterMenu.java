@@ -9,6 +9,7 @@ import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
 import com.example.henrik.googlemapsexample.R;
+import com.example.henrik.googlemapsexample.globalclasses.DatabaseHandler;
 
 public class Activity_FilterMenu extends AppCompatActivity implements View.OnClickListener {
     private String SAVED_INFO = "savedFilters";
@@ -83,6 +84,7 @@ public class Activity_FilterMenu extends AppCompatActivity implements View.OnCli
 
             }
         });
+
 
 
         //Do the onClick method if any of the buttons are clicked

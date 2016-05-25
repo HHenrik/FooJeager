@@ -33,7 +33,7 @@ public class RestaurantAdapter extends ArrayAdapter<Restaurant> {
         if(getItem(position).getGoogleRating().equals("0"))
             review.setText("Not graded");
         else
-            review.setText(getItem(position).getGoogleRating().toString());
+            review.setText("Grade: " + getItem(position).getGoogleRating().toString());
 
         return customView;
     }

@@ -102,7 +102,12 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         setContentView(R.layout.activity_main);
         resturantMarkers = new Marker[60];//Max antal restauranger som visas
         setUserLocationOnMap();
-
+        if(!DataStorage.getInstance().isUserPositionSupport()){
+            LatLng kristianstadCords = new LatLng(56.0333333, 14.1333333);
+            zoomMapToMarker(kristianstadCords, 12);
+        }
+        sortButton = (Button) findViewById(R.id.sortButton);
+        sortButton.setVisibility(View.GONE);
 
         Context context = getApplicationContext();
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
@@ -122,7 +127,18 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                 .enableAutoManage(this, (GoogleApiClient.OnConnectionFailedListener) this)
                 .build();
 */
-
+      /*  DatabaseHandler handler = new DatabaseHandler(this);
+        ArrayList<String> sven = new ArrayList();
+        sven.add("Burger");
+        sven.add("Romantic");
+        handler.getRestaurantWithFilter(sven, new DatabaseHandler.callbackGetRestaurantWithFilter() {
+            @Override
+            public void onSuccess(ArrayList<String> restaurantFilterList) {
+                Log.d(restaurantFilterList.get(0).toString(),"jaja");
+                for(int i=0;i<restaurantFilterList.size();i++)
+                Log.d(restaurantFilterList.get(i).toString(),"jaja");
+            }
+        });*/
     }
 
     private void setUpAccelometer() {
@@ -171,10 +187,10 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         Log.d(Integer.toString(i), "random number");
     }
 
-    private void zoomMapToMarker(LatLng markerLocation) {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLocation, 18));
+    private void zoomMapToMarker(LatLng markerLocation, int zoomValue) {
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLocation, zoomValue));
         map.animateCamera(CameraUpdateFactory.zoomIn());
-        map.animateCamera(CameraUpdateFactory.zoomTo(18), 3000, null);
+        map.animateCamera(CameraUpdateFactory.zoomTo(zoomValue), 3000, null);
     }
 
     private void setRestaurantListView() {
@@ -186,13 +202,12 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 for (int i = 0; i < restaurantList.size(); i++) {
                    if (restaurantList.get(i).getName().equals(restaurantList.get(position).getName())) {
-                        //restaurantList.get(i).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                       // if (previusClickedID != restaurantList.size() + 1) {
-                         //   restaurantList.get(previusClickedID).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-                        //}
-                        zoomMapToMarker(restaurantList.get(i).getPosition());
+                        restaurantList.get(i).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                        if (previusClickedID != restaurantList.size() + 1) {
+                           restaurantList.get(previusClickedID).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                        }
+                        zoomMapToMarker(restaurantList.get(i).getPosition(),18);
                         previusClickedID = i;
-//                        Log.d(restaurantList.get(i).getMarker().getTitle(), "Lookd");
                     }
 
 
@@ -310,15 +325,14 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
             // Called when secondary layout is dragged up by user
             @Override
             public void onPanelExpanded(View panel) {
-                sortButton = (Button) findViewById(R.id.sortButton);
                 sortButton.setActivated(true);
-                //sortButton.setVisibility(View.VISIBLE);
+                sortButton.setVisibility(View.VISIBLE);
             }
 
             // Called when secondary layout is dragged down by user
             @Override
             public void onPanelCollapsed(View panel) {
-                sortButton.setVisibility(View.GONE);
+               sortButton.setVisibility(View.GONE);
 
             }
 
@@ -391,6 +405,17 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                     }
                 }
         );
+        /*
+
+          for(int i = 0;i<restaurantList.size();i++){
+                    if(restaurantList.get(i).getMarker()!=null){
+                        Log.d("Has marker","MNullchecker");
+                        restaurantList.get(i).getMarker().setVisible(false);
+                    }
+                    else{
+                        Log.d("NULL marker","MNullchecker");
+                    }
+         */
 
 
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()//Denna metod tar dock bort så att namnet inte längre syns när man klickar. Ha namnet alltid där? Eller bättre att bara erbjuda att öppna och inte tvinga användaren!
@@ -515,7 +540,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                 }
 
                 try {
-                    Thread.sleep(1200);//2400 för sida 3
+                    Thread.sleep(2400);//2400 för sida 3
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -532,6 +557,11 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                     sortRestarantList("Sorted on names",5);
                     setRestaurantListView();
                     panelListener();
+                    for(int i=0;i<restaurantList.size();i++){
+                        Log.d(restaurantList.get(i).getName(),"RestaurantName");
+                        Log.d(restaurantList.get(i).getId(),"RestaurantName");
+                    }
+
                 }
             }
 
@@ -631,7 +661,6 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                             restaurant.setGoogleRating(jsonObjectRestaurant.getString("rating"));
                         }
                         catch (JSONException exception) {
-                            float sven = 0;
                             //restaurantGoogleRatings.add(sven);
                             restaurant.setGoogleRating("0");
                         }
@@ -669,14 +698,16 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
 
                    // else {
 
-                   else{
-                     if(!restaurantTemp.getName().equals("Gamlegårdens Restaurant")){//Denna restaurang har även Gamlegården Restaurang AB
-                        resturantsMarkerOptions[p] = new MarkerOptions().position(restaurantLocation).title(restaurantName).icon
-                                (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).snippet(restaurantVicinity);//Vi kan ha olika ikoner beroende på typ av restaurang eller nått sånt.
-                        //}
-                        markerCounter++;
-                        restaurantList.add(restaurantTemp);
-                    }}
+                   else {
+                     //Gamegården har två resultat. Rusab är ingen restaurang
+                    // if (!restaurantTemp.getName().equals("Gamlegårdens Restaurant") && !restaurantTemp.getName().equals("Rusab")) {
+                         resturantsMarkerOptions[p] = new MarkerOptions().position(restaurantLocation).title(restaurantName).icon
+                                 (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).snippet(restaurantVicinity);//Vi kan ha olika ikoner beroende på typ av restaurang eller nått sånt.
+                         //}
+                         markerCounter++;
+                         restaurantList.add(restaurantTemp);
+                     //}
+                 }
 
                     Log.d("Placing marker", "PlaceName");
 

@@ -30,8 +30,8 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
         android:id="@+id/restaurantReview"
-        android:layout_alignParentTop="true"
+        android:textSize="24dp"
+        android:layout_below="@+id/restaurantName"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textSize="24dp" />
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
