@@ -210,7 +210,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         //}
 
 
-        restaurantAdapter = new RestaurantAdapter (this, restaurantList);
+        restaurantAdapter = new RestaurantAdapter(this, restaurantList);
 
 
 
