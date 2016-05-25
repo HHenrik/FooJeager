@@ -1,4 +1,4 @@
-package com.example.henrik.googlemapsexample;
+package com.example.henrik.googlemapsexample.mapview;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +19,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.henrik.googlemapsexample.R;
+import com.example.henrik.googlemapsexample.filtermenu.Activity_FilterMenu;
+import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
+import com.example.henrik.googlemapsexample.mainmenu.MainMenu;
+import com.example.henrik.googlemapsexample.restaurant.Restaurant;
+import com.example.henrik.googlemapsexample.restaurant.RestaurantActivity;
+import com.example.henrik.googlemapsexample.restaurant.RestaurantAdapter;
+import com.example.henrik.googlemapsexample.review.ReviewObject;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -304,7 +312,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
             public void onPanelExpanded(View panel) {
                 sortButton = (Button) findViewById(R.id.sortButton);
                 sortButton.setActivated(true);
-                sortButton.setVisibility(View.VISIBLE);
+                //sortButton.setVisibility(View.VISIBLE);
             }
 
             // Called when secondary layout is dragged down by user
@@ -558,7 +566,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                 JSONArray reviews = jObjectResult.getJSONArray("reviews");
                 for (int i = 0; i < reviews.length(); i++) {
                     JSONObject reviewIndex = reviews.getJSONObject(i);
-                    ReviewObject restaurantReviews = new ReviewObject(0, Float.parseFloat(reviewIndex.getString("rating")), 0, 0, 0, 0, 0, 0, reviewIndex.getString("author_name"), reviewIndex.getString("text"), "", "", "");
+                    ReviewObject restaurantReviews = new ReviewObject(0, Float.parseFloat(reviewIndex.getString("rating")), 0, 0, 0, 0, 0, 0, reviewIndex.getString("text"), "", "", "");
                     reviewArray.add(i, restaurantReviews);
                 }
                 DataStorage.getInstance().getRestaurantList().get(savedObjectId).setReviews(reviewArray);
