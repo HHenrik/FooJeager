@@ -21,6 +21,8 @@ public class ReviewViewer extends AppCompatActivity {
 
     private ArrayList<ReviewObject> list = new ArrayList();
 
+    private ListView rew;
+
     private ListAdapter adapter;
     private String restaurantId;
     private Boolean googleReview = false;
@@ -31,8 +33,8 @@ public class ReviewViewer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reviews);
-
-         restaurantId = DataStorage.getInstance().getRestaurantList().get(DataStorage.getInstance().getActiveRestaurant()).getId();
+        rew = (ListView) findViewById(R.id.listView);
+        restaurantId = DataStorage.getInstance().getRestaurantList().get(DataStorage.getInstance().getActiveRestaurant()).getId();
 
         if(DataStorage.getInstance().isReviewType()) {
             googleReview = false;
@@ -43,14 +45,40 @@ public class ReviewViewer extends AppCompatActivity {
             list.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Inte mycket att hänga i granen men helt ok", "", "", ""));
             list.add(new ReviewObject(0, 5, 0, 0, 0, 0, 0, 0, "https://www.youtube.com/channel/UCPlV0OpQMImKviSTWHJEDi", "", "", ""));
             list.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Äter hellre på khai mui.", "", "", ""));*/
-            //getRestaurantReviews(restaurantId);
+
+            getRestaurantReviews(restaurantId);
         }
         else{
             googleReview = true;
             list = DataStorage.getInstance().getRestaurantList().get(DataStorage.getInstance().getActiveRestaurant()).getReviews();
+            displayReviews();
         }
+    }
 
-        final ListView rew = (ListView) findViewById(R.id.listView);
+    private void getRestaurantReviews(String restaurantId){
+
+        dbHandler.getAllReviewsFromRestaurant(restaurantId, new DatabaseHandler.callbackGetAllReviewsFromRestaurant() {
+            @Override
+            public void onSuccess(ArrayList<ReviewObject> reviewList) {
+
+                //list = reviewList;
+                for(int i = 0; i < reviewList.size(); i++) {
+                    list.add(reviewList.get(i));
+                }
+                /*System.out.println("skit" + list.size());
+                for(int i = 0; i < list.size(); i++) {f
+                    list2.add(list.get(i));
+                }*/
+                //list.add(new ReviewObject(0, 5, 0, 0, 0, 0, 0, 0, "Äter hellre på khai mui.", "", "", ""));
+                displayReviews();
+            }
+
+        });
+
+    }
+
+    private void displayReviews(){
+
         adapter = new ReviewAdapter(this, list);
 
         rew.setAdapter(adapter);
@@ -69,19 +97,4 @@ public class ReviewViewer extends AppCompatActivity {
             }
         });
     }
-
-    private void getRestaurantReviews(String restaurantId){
-
-        dbHandler.getAllReviewsFromRestaurant(restaurantId, new DatabaseHandler.callbackGetAllReviewsFromRestaurant() {
-            @Override
-            public void onSuccess(ArrayList<ReviewObject> reviewList) {
-                list = reviewList;
-                //list.add(new ReviewObject(0, 5, 0, 0, 0, 0, 0, 0, "Äter hellre på khai mui.", "", "", ""));
-            }
-        });
-    }
-
-
-
-
 }

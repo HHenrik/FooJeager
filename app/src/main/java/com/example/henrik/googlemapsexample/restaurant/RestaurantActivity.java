@@ -18,6 +18,7 @@ import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
 import com.example.henrik.googlemapsexample.R;
 import com.example.henrik.googlemapsexample.review.ReviewViewer;
 import com.example.henrik.googlemapsexample.fragments.Website_fragment;
+import com.example.henrik.googlemapsexample.review.WriteReview;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -120,6 +121,12 @@ public class RestaurantActivity extends AppCompatActivity {
         String googleDirectionURL = String.format(Locale.ENGLISH, "http://maps.google.com/maps?saddr=%f,%f(%s)&daddr=%f,%f (%s)", userPosition.latitude, userPosition.longitude, "Your Position", restaurantList.get(restaurantID).getPosition().latitude, restaurantList.get(restaurantID).getPosition().longitude, restaurantList.get(restaurantID).getName());
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(googleDirectionURL));
         intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+        startActivity(intent);
+    }
+
+    public void reviewButton(View v) {
+        Intent intent = new Intent(RestaurantActivity.this, WriteReview.class);
+
         startActivity(intent);
     }
 
