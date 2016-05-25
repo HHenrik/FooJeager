@@ -65,7 +65,8 @@
         android:layout_below="@+id/directionButton"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:onClick="reviewButton" />
 
     <TextView
         android:layout_width="wrap_content"
