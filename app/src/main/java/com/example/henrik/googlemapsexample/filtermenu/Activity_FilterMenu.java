@@ -1,4 +1,4 @@
-package com.example.henrik.googlemapsexample;
+package com.example.henrik.googlemapsexample.filtermenu;
 
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
+
+import com.example.henrik.googlemapsexample.R;
 
 public class Activity_FilterMenu extends AppCompatActivity implements View.OnClickListener {
     private String SAVED_INFO = "savedFilters";

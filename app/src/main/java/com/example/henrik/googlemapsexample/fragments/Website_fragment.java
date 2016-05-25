@@ -1,4 +1,4 @@
-package com.example.henrik.googlemapsexample;
+package com.example.henrik.googlemapsexample.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.example.henrik.googlemapsexample.R;
+import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
 
 /**
  * Created by Henrik on 2016-05-16.

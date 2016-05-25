@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.henrik.googlemapsexample.Activity_UserProfile"
+    tools:context=".userprofile.Activity_UserProfile"
     android:background="#107896">
     <View
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lv. 40"
+        android:text="Lv. 0"
         android:id="@+id/levelLabel"
         android:textSize="50dp"
         android:textColor="#F4F4F4"
@@ -89,7 +89,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="80"
         android:id="@+id/likesAmountLabel"
         android:layout_alignTop="@+id/likesLabel"
         android:layout_toRightOf="@+id/likesLabel"
@@ -102,7 +101,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="40"
         android:id="@+id/dislikesAmountLabel"
         android:textAlignment="center"
         android:layout_alignTop="@+id/dislikesLabel"

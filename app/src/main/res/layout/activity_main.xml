@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.henrik.googlemapsexample.MainActivity"
+    tools:context=".mapview.MainActivity"
     android:background="#107896">
 
 
@@ -35,11 +35,11 @@
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.MapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="480dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/mainMenuButton"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="50dp" />
 
             <ImageButton
                 android:layout_width="wrap_content"

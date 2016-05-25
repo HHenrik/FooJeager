@@ -1,4 +1,4 @@
-package com.example.henrik.googlemapsexample;
+package com.example.henrik.googlemapsexample.restaurantmenu;
 
 
 public class MenuObject {
