@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#107896">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/bottomLine"
+        android:layout_alignTop="@+id/affBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/lowLine"
+        android:layout_below="@+id/qBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/affBar"
+        style="@style/Base.Widget.AppCompat.RatingBar.Indicator"
+        android:progressTint="#d9f00b"
+        android:layout_below="@+id/averageBar"
+        android:layout_toRightOf="@+id/textView8"
+        android:layout_toEndOf="@+id/textView8" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/amBar"
+        style="@style/Base.Widget.AppCompat.RatingBar.Indicator"
+        android:progressTint="#d9f00b"
+        android:layout_below="@+id/staffBar"
+        android:layout_alignLeft="@+id/staffBar"
+        android:layout_alignStart="@+id/staffBar" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/staffBar"
+        style="@style/Base.Widget.AppCompat.RatingBar.Indicator"
+        android:progressTint="#d9f00b"
+        android:layout_below="@+id/textView8"
+        android:layout_alignLeft="@+id/affBar"
+        android:layout_alignStart="@+id/affBar" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/qBar"
+        style="@style/Base.Widget.AppCompat.RatingBar.Indicator"
+        android:progressTint="#d9f00b"
+        android:clickable="false"
+        android:layout_below="@+id/amBar"
+        android:layout_alignLeft="@+id/amBar"
+        android:layout_alignStart="@+id/amBar" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/averageBar"
+        android:progressTint="#d9f00b"
+
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Affordability"
+        android:id="@+id/textView8"
+        android:layout_alignBottom="@+id/affBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Staff"
+        android:id="@+id/textView9"
+        android:layout_above="@+id/amBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Ambience"
+        android:id="@+id/textView10"
+        android:layout_above="@+id/qBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Quality"
+        android:id="@+id/textView11"
+        android:layout_alignBottom="@+id/qBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Like"
+        android:id="@+id/likeButton"
+        android:layout_below="@+id/lowLine"
+        android:layout_toRightOf="@+id/textView11"
+        android:layout_toEndOf="@+id/textView11" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dislike"
+        android:id="@+id/dislikeButton"
+        android:layout_alignTop="@+id/lowLine"
+        android:layout_alignRight="@+id/averageBar"
+        android:layout_alignEnd="@+id/averageBar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/reviewText"
+        android:layout_below="@+id/likeButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="User:"
+        android:id="@+id/textView13"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Likes"
+        android:id="@+id/textView14"
+        android:layout_alignTop="@+id/textView9"
+        android:layout_toRightOf="@+id/staffBar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Dislikes"
+        android:id="@+id/textView15"
+        android:layout_alignBottom="@+id/amBar"
+        android:layout_alignLeft="@+id/textView14"
+        android:layout_alignStart="@+id/textView14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="100"
+        android:id="@+id/likeValue"
+        android:layout_alignTop="@+id/textView14"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="#3fe502" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="100"
+        android:id="@+id/dislikeValue"
+        android:layout_alignTop="@+id/textView15"
+        android:layout_alignLeft="@+id/likeValue"
+        android:layout_alignStart="@+id/likeValue"
+        android:textColor="#ff0011" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="dsfdfdsfsfs"
+        android:id="@+id/userName"
+        android:layout_alignBottom="@+id/textView13"
+        android:layout_toRightOf="@+id/textView9"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

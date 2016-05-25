@@ -1,6 +1,7 @@
 package com.example.henrik.googlemapsexample.globalclasses;
 
 import com.example.henrik.googlemapsexample.restaurant.Restaurant;
+import com.example.henrik.googlemapsexample.review.ReviewObject;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class DataStorage {
     private boolean userPositionSupport = false;
     private boolean reviewType;
     private int activeRestaurantIndex;
+    private ReviewObject review;
     private DataStorage(){
 
     }
@@ -74,5 +76,13 @@ public class DataStorage {
 
     public void setActiveRestaurant(int activeRestaurantIndex) {
         this.activeRestaurantIndex = activeRestaurantIndex;
+    }
+
+    public void setReview(ReviewObject review) {
+        this.review = review;
+    }
+
+    public ReviewObject getReview() {
+        return review;
     }
 }

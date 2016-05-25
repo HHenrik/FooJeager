@@ -1,5 +1,7 @@
 package com.example.henrik.googlemapsexample.review;
 
+import java.io.Serializable;
+
 /**
  * Created by Minkan on 2016-05-16.
  */
