@@ -22,7 +22,7 @@ public class Restaurant {
     private ArrayList <ReviewObject> reviews = new ArrayList();
     private String[] openHoursArray;
     private boolean openNow;
-
+    private Float distanceToRestaurant;
 
 
     public Marker getMarker() {
@@ -131,5 +131,13 @@ public class Restaurant {
 
     public void setOpenNow(boolean openNow) {
         this.openNow = openNow;
+    }
+
+    public Float getDistanceToRestaurant() {
+        return distanceToRestaurant;
+    }
+
+    public void setDistanceToRestaurant(Float distanceToRestaurant) {
+        this.distanceToRestaurant = distanceToRestaurant;
     }
 }
