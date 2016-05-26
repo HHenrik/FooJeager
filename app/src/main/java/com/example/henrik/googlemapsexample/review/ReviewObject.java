@@ -72,6 +72,10 @@ public class ReviewObject {
         return user;
     }
 
+    public void setUser(String user) {
+        this.user = user;
+    }
+
     public String getText() {
         return text;
     }

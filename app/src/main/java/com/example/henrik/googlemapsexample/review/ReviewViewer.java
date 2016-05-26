@@ -3,6 +3,7 @@ package com.example.henrik.googlemapsexample.review;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import com.example.henrik.googlemapsexample.R;
 import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
 import com.example.henrik.googlemapsexample.globalclasses.DatabaseHandler;
+import com.example.henrik.googlemapsexample.userprofile.User;
 
 import java.util.ArrayList;
 
@@ -26,6 +28,8 @@ public class ReviewViewer extends AppCompatActivity {
     private ListAdapter adapter;
     private String restaurantId;
     private Boolean googleReview = false;
+
+    private String name = "";
 
     private DatabaseHandler dbHandler = new DatabaseHandler(this);
 
@@ -47,6 +51,14 @@ public class ReviewViewer extends AppCompatActivity {
             list.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Äter hellre på khai mui.", "", "", ""));
             displayReviews();*/
             getRestaurantReviews(restaurantId);
+
+           /*for(int i = 0; i < list.size(); i++){
+                getUsername(list.get(i).getDeviceId());
+                list.get(i).setUser(name);
+                System.out.println("haalp");
+            }*/
+
+
         }
         else{
             googleReview = true;
@@ -61,20 +73,30 @@ public class ReviewViewer extends AppCompatActivity {
             @Override
             public void onSuccess(ArrayList<ReviewObject> reviewList) {
 
-                //list = reviewList;
-                for(int i = 0; i < reviewList.size(); i++) {
-                    list.add(reviewList.get(i));
+                list = reviewList;
+                getUsernames();
+
+            }
+        });
+    }
+
+    private void getUsernames(){
+
+
+        dbHandler.getAllUserData(new DatabaseHandler.callbackGetAllUserData() {
+            @Override
+            public void onSuccess(ArrayList<User> userList) {
+
+                for(int i = 0; i < list.size(); i++){
+                    for(int j = 0; j < userList.size(); j++){
+                        if(list.get(i).getDeviceId().equals(userList.get(j).getDevice_id())){
+                            list.get(i).setUser(userList.get(j).getName());
+                        }
+                    }
                 }
-                /*System.out.println("skit" + list.size());
-                for(int i = 0; i < list.size(); i++) {f
-                    list2.add(list.get(i));
-                }*/
-                //list.add(new ReviewObject(0, 5, 0, 0, 0, 0, 0, 0, "Äter hellre på khai mui.", "", "", ""));
                 displayReviews();
             }
-
         });
-
     }
 
     private void displayReviews(){
@@ -90,6 +112,7 @@ public class ReviewViewer extends AppCompatActivity {
 
                     Intent intent = new Intent(ReviewViewer.this, ReviewDetailed.class);
                     DataStorage.getInstance().setReview(list.get(position));
+                    System.out.println("bajs " + list.get(position).getDeviceId());
                     startActivity(intent);
                 } else {
 

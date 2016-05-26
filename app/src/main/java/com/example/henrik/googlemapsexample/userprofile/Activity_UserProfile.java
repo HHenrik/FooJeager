@@ -85,14 +85,14 @@ public class Activity_UserProfile extends AppCompatActivity {
         }
         else{
           //If it is not the first time, do the following:
-            getUserData(androidId);
+           getUserData(androidId);
 
             //Load recent reviews by user from the database
             setRecentReviews();
 
             //For testing
             //editor.clear();
-           // editor.commit();
+            //editor.commit();
             //---------------
         }
 

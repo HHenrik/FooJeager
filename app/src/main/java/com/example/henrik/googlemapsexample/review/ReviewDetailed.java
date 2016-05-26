@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.example.henrik.googlemapsexample.R;
 import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
+import com.example.henrik.googlemapsexample.globalclasses.DatabaseHandler;
 import com.example.henrik.googlemapsexample.userprofile.Activity_UserProfile;
+import com.example.henrik.googlemapsexample.userprofile.User;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,8 @@ public class ReviewDetailed extends AppCompatActivity{
     private ReviewObject rev = new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Mannen i restaurangen vet inte att han snart kommer bli sparkad", "", "", "");
     private ArrayList<ReviewObject> list = new ArrayList();
     private int pos = 1;
+
+    private DatabaseHandler dbHandler = new DatabaseHandler(this);
 
     TextView userName;
     TextView likes;
@@ -54,6 +58,7 @@ public class ReviewDetailed extends AppCompatActivity{
 
         rev = DataStorage.getInstance().getReview();
 
+        getUser(rev.getDeviceId());
         postResults();
 
         userName.setOnClickListener(new View.OnClickListener() {
@@ -85,5 +90,16 @@ public class ReviewDetailed extends AppCompatActivity{
     private void userClicked(){
         Intent intent = new Intent(ReviewDetailed.this, Activity_UserProfile.class);
         startActivity(intent);
+    }
+
+    private void getUser(String deviceId){
+        dbHandler.getUserData(deviceId, new DatabaseHandler.callbackGetUserData() {
+            @Override
+            public void onSuccess(User user) {
+                Log.d("User: ", "   Device_id: " + user.getDevice_id() + "   Name: " + user.getName() + "   Likes: " + user.getLikes() + "   Dislikes: " + user.getDislikes());
+                userName.setText(user.getName());
+
+            }
+        });
     }
 }
