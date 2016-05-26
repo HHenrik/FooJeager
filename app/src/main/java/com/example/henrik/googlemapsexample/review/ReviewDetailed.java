@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -60,6 +61,9 @@ public class ReviewDetailed extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ReviewDetailed.this, Activity_UserProfile.class);
+                Log.d("FROM REVIEW: ", rev.getDeviceId());
+                intent.putExtra("androidID", rev.getDeviceId());
+                DataStorage.getInstance().setFromReview(true);
                 startActivity(intent);
             }
         });

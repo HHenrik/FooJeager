@@ -301,7 +301,7 @@ public class DatabaseHandler {
                         resultRestaurant_id = userData.getString("restaurant_id");
                         resultUser_device_id = userData.getString("user_device_id");
 
-                        review = (new ReviewObject(Integer.parseInt(resultId), Float.parseFloat(resultAvarage), Integer.parseInt(resultStaff), Integer.parseInt(resultAffordable), Integer.parseInt(resultAmbience), Integer.parseInt(resultQuality), Integer.parseInt(resultDislikes), Integer.parseInt(resultLikes), resultComment, resultTimestamp,resultUser_device_id, resultRestaurant_id));
+                        review = (new ReviewObject(Integer.parseInt(resultId), Float.parseFloat(resultAvarage), Integer.parseInt(resultStaff), Integer.parseInt(resultAffordable), Integer.parseInt(resultAmbience), Integer.parseInt(resultQuality), Integer.parseInt(resultDislikes), Integer.parseInt(resultLikes), resultComment, resultTimestamp,resultRestaurant_id,resultUser_device_id));
                         numberOfResultsGathered++;
 
                         reviewList.add(review);

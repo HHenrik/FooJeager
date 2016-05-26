@@ -5,6 +5,7 @@ package com.example.henrik.googlemapsexample.userprofile;
 //Android imports
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -58,17 +59,25 @@ public class Activity_UserProfile extends AppCompatActivity {
 
         //Check in the stored preferences if it is the first time the application starts on this phone
         firstAppStart = preferences.getBoolean("firstAppStart", true);
+        Intent intent = getIntent();
 
-        //Get the android id (phone id) and save it to a string
-        if(DataStorage.getInstance().getReview() != null &&
-                DataStorage.getInstance().getReview().getDeviceId() ==
-                        Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID)) {
+
+        Log.d("BEFORE", " LOOP");
+        if(DataStorage.getInstance().isFromReview() == true){
+            Log.d("DEVICE ID: ", intent.getExtras().getString("androidID"));
+            androidId = intent.getExtras().getString("androidID");
+
+        }else{
+
             androidId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        } else {
-            androidId = DataStorage.getInstance().getReview().getDeviceId();
+            Log.d("DEVICE ID: ", androidId);
         }
 
-        if(firstAppStart == true){
+        DataStorage.getInstance().setFromReview(false);
+
+
+
+        if(firstAppStart == true && DataStorage.getInstance().isFromReview() == false){
             //If it is the first time do the following:
 
             //Create a pop-up dialog that prompts the user to enter a username
