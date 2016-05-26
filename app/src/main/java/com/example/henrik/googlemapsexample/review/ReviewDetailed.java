@@ -1,13 +1,16 @@
 package com.example.henrik.googlemapsexample.review;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.henrik.googlemapsexample.R;
 import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
+import com.example.henrik.googlemapsexample.userprofile.Activity_UserProfile;
 
 import java.util.ArrayList;
 
@@ -51,9 +54,16 @@ public class ReviewDetailed extends AppCompatActivity{
         rev = DataStorage.getInstance().getReview();
 
         postResults();
+
+        userName.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ReviewDetailed.this, Activity_UserProfile.class);
+                startActivity(intent);
+            }
+        });
     }
-
-
 
     private void postResults(){
 
@@ -66,5 +76,10 @@ public class ReviewDetailed extends AppCompatActivity{
         amBar.setRating((float)rev.getAmbienceScore());
         qBar.setRating((float)rev.getQualityScore());
         averageBar.setRating(rev.getAverageScore());
+    }
+
+    private void userClicked(){
+        Intent intent = new Intent(ReviewDetailed.this, Activity_UserProfile.class);
+        startActivity(intent);
     }
 }

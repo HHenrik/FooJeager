@@ -206,6 +206,7 @@
         android:layout_alignBottom="@+id/textView13"
         android:layout_toRightOf="@+id/textView9"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:clickable="true" />
 
 </RelativeLayout>

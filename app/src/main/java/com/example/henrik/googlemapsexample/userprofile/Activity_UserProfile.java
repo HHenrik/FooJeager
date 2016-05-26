@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 //Package imports
 import com.example.henrik.googlemapsexample.R;
+import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
 import com.example.henrik.googlemapsexample.globalclasses.DatabaseHandler;
 import com.example.henrik.googlemapsexample.review.ReviewAdapter;
 import com.example.henrik.googlemapsexample.review.ReviewObject;
@@ -59,7 +60,13 @@ public class Activity_UserProfile extends AppCompatActivity {
         firstAppStart = preferences.getBoolean("firstAppStart", true);
 
         //Get the android id (phone id) and save it to a string
-        androidId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        if(DataStorage.getInstance().getReview() != null &&
+                DataStorage.getInstance().getReview().getDeviceId() ==
+                        Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID)) {
+            androidId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        } else {
+            androidId = DataStorage.getInstance().getReview().getDeviceId();
+        }
 
         if(firstAppStart == true){
             //If it is the first time do the following:
