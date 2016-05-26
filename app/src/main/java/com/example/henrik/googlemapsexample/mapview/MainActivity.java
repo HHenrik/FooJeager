@@ -399,7 +399,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                             e.printStackTrace();
                         }
 
-                        DataStorage.getInstance().setRestaurantList(restaurantList);
+
                         Intent intent = new Intent(MainActivity.this, RestaurantActivity.class);
                         startActivity(intent);
                     }
@@ -561,6 +561,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                         Log.d(restaurantList.get(i).getName(),"RestaurantName");
                         Log.d(restaurantList.get(i).getId(),"RestaurantName");
                     }
+                    DataStorage.getInstance().setRestaurantList(restaurantList);
 
                 }
             }

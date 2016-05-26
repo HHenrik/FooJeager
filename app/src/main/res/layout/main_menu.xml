@@ -10,37 +10,24 @@
         android:layout_marginTop="44dp"
         android:src="@drawable/mainmenu_favourites_button_250"
         android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/storedMenuButton"
-        android:layout_alignStart="@+id/storedMenuButton"
         android:background="#00ffffff"
         android:visibility="visible"
         android:clickable="false"
-        android:onClick="buttonClicked" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/storedMenuButton"
-        android:src="@drawable/mainmenu_storedmenu_button_250"
-        android:layout_below="@+id/favouritesButton"
+        android:onClick="buttonClicked"
         android:layout_alignLeft="@+id/profileButton"
-        android:layout_alignStart="@+id/profileButton"
-        android:background="#00ffffff"
-        android:visibility="visible"
-        android:clickable="false"
-        android:onClick="buttonClicked" />
+        android:layout_alignStart="@+id/profileButton" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/profileButton"
         android:src="@drawable/mainmenu_profile_button_250"
-        android:layout_below="@+id/storedMenuButton"
         android:layout_centerHorizontal="true"
         android:background="#00ffffff"
         android:visibility="visible"
         android:clickable="false"
-        android:onClick="buttonClicked" />
+        android:onClick="buttonClicked"
+        android:layout_below="@+id/favouritesButton" />
 
     <ImageButton
         android:layout_width="wrap_content"

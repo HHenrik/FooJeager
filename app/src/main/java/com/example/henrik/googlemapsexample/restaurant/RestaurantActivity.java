@@ -58,6 +58,7 @@ public class RestaurantActivity extends AppCompatActivity {
     private Set<String> markedFavIds;
     private int storedAtIndex = -1;
     private List loadedFavList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,11 +77,12 @@ public class RestaurantActivity extends AppCompatActivity {
         //Read favourites from sharedpreferences
         //Set button toggle if id matches the restaurants id
 
-     //   editor.clear();
-     //   editor.commit();
+            //editor.clear();
+           //editor.commit();
+            //Log.d("CLEARED", " NOW");
 
         markedFavIds = preferences.getStringSet("markedFavs", new HashSet<String>());
-        List loadedFavList = new ArrayList(markedFavIds);
+        loadedFavList = new ArrayList(markedFavIds);
 
         for(int i = 0; i < loadedFavList.size(); i++) {
             if (restaurantList.get(restaurantID).getId().equals(loadedFavList.get(i))){
@@ -92,7 +94,6 @@ public class RestaurantActivity extends AppCompatActivity {
                 break;
             }
         }
-
 
     }
 

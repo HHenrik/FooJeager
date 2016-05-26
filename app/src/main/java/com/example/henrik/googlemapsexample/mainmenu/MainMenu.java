@@ -28,10 +28,6 @@ public class MainMenu extends AppCompatActivity {
                 intent = new Intent(MainMenu.this, Activity_Favourites.class);
                 startActivity(intent);
                 break;
-            case R.id.storedMenuButton:
-                //intent = new Intent(MainMenu.this, Activity_StoredMenuView.class);
-                //startActivity(intent);
-                break;
             case R.id.profileButton:
                 intent = new Intent(MainMenu.this, Activity_UserProfile.class);
                 startActivity(intent);
