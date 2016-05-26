@@ -120,7 +120,8 @@
         android:id="@+id/likeButton"
         android:layout_below="@+id/lowLine"
         android:layout_toRightOf="@+id/textView11"
-        android:layout_toEndOf="@+id/textView11" />
+        android:layout_toEndOf="@+id/textView11"
+        android:onClick="onClick" />
 
     <Button
         android:layout_width="wrap_content"
@@ -129,7 +130,8 @@
         android:id="@+id/dislikeButton"
         android:layout_alignTop="@+id/lowLine"
         android:layout_alignRight="@+id/averageBar"
-        android:layout_alignEnd="@+id/averageBar" />
+        android:layout_alignEnd="@+id/averageBar"
+        android:onClick="onClick" />
 
     <TextView
         android:layout_width="wrap_content"

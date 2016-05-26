@@ -48,6 +48,7 @@
         <activity android:name=".filtermenu.Activity_FilterMenu" />
         <activity android:name=".userprofile.Activity_UserProfile" />
         <activity android:name=".review.ReviewDetailed" />
+        <activity android:name=".review.ReviewDetailedGoogle" />
         <activity android:name=".favourites.Activity_Favourites"></activity>
     </application>
 

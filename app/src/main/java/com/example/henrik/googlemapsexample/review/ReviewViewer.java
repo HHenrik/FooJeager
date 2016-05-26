@@ -112,12 +112,22 @@ public class ReviewViewer extends AppCompatActivity {
 
                     Intent intent = new Intent(ReviewViewer.this, ReviewDetailed.class);
                     DataStorage.getInstance().setReview(list.get(position));
-                    System.out.println("bajs " + list.get(position).getDeviceId());
+
                     startActivity(intent);
                 } else {
+                    Intent intent = new Intent(ReviewViewer.this, ReviewDetailedGoogle.class);
+                    DataStorage.getInstance().setReview(list.get(position));
 
+                    startActivity(intent);
                 }
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        getRestaurantReviews(restaurantId);
+
     }
 }

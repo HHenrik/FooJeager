@@ -28,10 +28,12 @@ public class ReviewAdapter extends ArrayAdapter<ReviewObject> {
 
         TextView user = (TextView) customView.findViewById(R.id.userName);
         TextView text = (TextView) customView.findViewById(R.id.text);
+        TextView date = (TextView) customView.findViewById(R.id.dateView);
         RatingBar score = (RatingBar) customView.findViewById(R.id.ratingBar);
 
         user.setText(getItem(position).getUser());
         text.setText(getItem(position).getText());
+        date.setText(getItem(position).getDate());
         score.setRating(getItem(position).getAverageScore());
 
         return customView;
