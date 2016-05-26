@@ -18,6 +18,8 @@ public class DataStorage {
     private boolean reviewType;
     private int activeRestaurantIndex;
     private ReviewObject review;
+    private boolean fromReview = false;
+
     private DataStorage(){
 
     }
@@ -84,5 +86,13 @@ public class DataStorage {
 
     public ReviewObject getReview() {
         return review;
+    }
+
+    public boolean isFromReview() {
+        return fromReview;
+    }
+
+    public void setFromReview(boolean fromReview) {
+        this.fromReview = fromReview;
     }
 }

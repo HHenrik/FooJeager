@@ -301,7 +301,7 @@ public class DatabaseHandler {
                         resultRestaurant_id = userData.getString("restaurant_id");
                         resultUser_device_id = userData.getString("user_device_id");
 
-                        review = (new ReviewObject(Integer.parseInt(resultId), Float.parseFloat(resultAvarage), Integer.parseInt(resultStaff), Integer.parseInt(resultAffordable), Integer.parseInt(resultAmbience), Integer.parseInt(resultQuality), Integer.parseInt(resultDislikes), Integer.parseInt(resultLikes), resultComment, resultTimestamp,resultUser_device_id, resultRestaurant_id));
+                        review = (new ReviewObject(Integer.parseInt(resultId), Float.parseFloat(resultAvarage), Integer.parseInt(resultStaff), Integer.parseInt(resultAffordable), Integer.parseInt(resultAmbience), Integer.parseInt(resultQuality), Integer.parseInt(resultDislikes), Integer.parseInt(resultLikes), resultComment, resultTimestamp,resultRestaurant_id,resultUser_device_id));
                         numberOfResultsGathered++;
 
                         reviewList.add(review);
@@ -418,5 +418,47 @@ public class DatabaseHandler {
 
     public interface callbackGetRestaurantWithFilter{
         void onSuccess(ArrayList<String> restaurantList);
+    }
+
+
+    public void getAllUserData(final callbackGetAllUserData callback){
+        String USER_URL = "http://" +  IP + "/android_connect/readAllUsers.php";
+        StringRequest stringRequest = new StringRequest(USER_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                User user;
+                ArrayList<User> userList = new ArrayList<>();
+                String resultName = "";
+                String resultDevice_id = "";
+                try {
+                    JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"), response.lastIndexOf("}") + 1));  //response normalt
+                    JSONArray result = jsonObject.getJSONArray("result");
+                    int numberOfResultsGathered = 0;
+                    for(int i = 0; i < result.length(); i++){
+                        JSONObject userData = result.getJSONObject(numberOfResultsGathered);
+                        resultName = userData.getString("name");
+                        resultDevice_id = userData.getString("device_id");
+                        user = new User(resultDevice_id, resultName, 0, 0);
+                        numberOfResultsGathered++;
+                        userList.add(user);
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                callback.onSuccess(userList);
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Toast.makeText(MainActivity.this, error.getMessage().toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+    public interface callbackGetAllUserData{
+        void onSuccess(ArrayList<User> userList);
     }
 }
