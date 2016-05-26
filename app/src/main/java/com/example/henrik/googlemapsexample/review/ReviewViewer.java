@@ -33,6 +33,7 @@ public class ReviewViewer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reviews);
+
         rew = (ListView) findViewById(R.id.listView);
         restaurantId = DataStorage.getInstance().getRestaurantList().get(DataStorage.getInstance().getActiveRestaurant()).getId();
 
@@ -80,6 +81,7 @@ public class ReviewViewer extends AppCompatActivity {
     private void displayReviews(){
 
         adapter = new ReviewAdapter(this, list);
+
 
         rew.setAdapter(adapter);
 

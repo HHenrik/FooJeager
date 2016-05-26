@@ -1,15 +1,14 @@
 package com.example.henrik.googlemapsexample.filtermenu;
 
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
 import com.example.henrik.googlemapsexample.R;
-import com.example.henrik.googlemapsexample.globalclasses.DatabaseHandler;
 
 public class Activity_FilterMenu extends AppCompatActivity implements View.OnClickListener {
     private String SAVED_INFO = "savedFilters";
@@ -43,6 +42,8 @@ public class Activity_FilterMenu extends AppCompatActivity implements View.OnCli
         //Open up shared preferences to be able to edit
         preferences = getSharedPreferences(SAVED_INFO, MODE_PRIVATE);
         editor = preferences.edit();
+
+
 
         //Initialize the buttons to corresponding ID
         fastFoodToggle = (ToggleButton) findViewById(R.id.fastFoodToggle);
@@ -106,22 +107,22 @@ public class Activity_FilterMenu extends AppCompatActivity implements View.OnCli
         vegetarianToggle.setOnClickListener(this);
 
         //Load default preferences if none are already set
-        fastFoodToggle.setChecked(preferences.getBoolean("fastFoodToggled", false));
-        fineDiningToggle.setChecked(preferences.getBoolean("fineDiningToggled", false));
-        pubToggle.setChecked(preferences.getBoolean("pubToggled", false));
-        cafeToggle.setChecked(preferences.getBoolean("cafeToggled", false));
-        romanticToggle.setChecked(preferences.getBoolean("romanticToggled", false));
-        buffetToggle.setChecked(preferences.getBoolean("buffetToggled", false));
+        fastFoodToggle.setChecked(preferences.getBoolean("Fast%20Food", false));
+        fineDiningToggle.setChecked(preferences.getBoolean("Fine%20Dining", false));
+        pubToggle.setChecked(preferences.getBoolean("Pub", false));
+        cafeToggle.setChecked(preferences.getBoolean("Cafe", false));
+        romanticToggle.setChecked(preferences.getBoolean("Romantic", false));
+        buffetToggle.setChecked(preferences.getBoolean("Buffet", false));
 
-        asianToggle.setChecked(preferences.getBoolean("asianToggled", false));
-        burgerToggle.setChecked(preferences.getBoolean("burgerToggled", false));
-        pizzaToggle.setChecked(preferences.getBoolean("pizzaToggled", false));
-        indianToggle.setChecked(preferences.getBoolean("indianToggled", false));
-        sushiToggle.setChecked(preferences.getBoolean("sushiToggled", false));
-        meatToggle.setChecked(preferences.getBoolean("meatToggled", false));
-        seafoodToggle.setChecked(preferences.getBoolean("seafoodToggled", false));
-        italianToggle.setChecked(preferences.getBoolean("italianToggled", false));
-        vegetarianToggle.setChecked(preferences.getBoolean("vegetarianToggled", false));
+        asianToggle.setChecked(preferences.getBoolean("Asian", false));
+        burgerToggle.setChecked(preferences.getBoolean("Burger", false));
+        pizzaToggle.setChecked(preferences.getBoolean("Pizza", false));
+        indianToggle.setChecked(preferences.getBoolean("Indian", false));
+        sushiToggle.setChecked(preferences.getBoolean("Sushi", false));
+        meatToggle.setChecked(preferences.getBoolean("Meat", false));
+        seafoodToggle.setChecked(preferences.getBoolean("Sea%20Food", false));
+        italianToggle.setChecked(preferences.getBoolean("Italian", false));
+        vegetarianToggle.setChecked(preferences.getBoolean("Vegetarian", false));
 
         Log.d("Value is: ", String.valueOf(preferences.getInt("priceSet",2)));
         priceAdjuster.setProgress(preferences.getInt("priceSet", 2));
@@ -135,151 +136,151 @@ public class Activity_FilterMenu extends AppCompatActivity implements View.OnCli
         switch (view.getId()) {
             case R.id.fastFoodToggle:
                 if(fastFoodToggle.isChecked() == true){
-                    editor.putBoolean("fastFoodToggled", true);
+                    editor.putBoolean("Fast%20Food", true);
                     Log.d("FastFood", "Checked");
                 }
                 else{
-                    editor.putBoolean("fastFoodToggled", false);
+                    editor.putBoolean("Fast%20Food", false);
                     Log.d("FastFood", "Not Checked");
                 }
                 break;
             case R.id.fineDiningToggle:
                 if(fineDiningToggle.isChecked() == true){
-                    editor.putBoolean("fineDiningToggled", true);
+                    editor.putBoolean("Fine%20Dining", true);
                     Log.d("FineDining", "Checked");
                 }
                 else{
-                    editor.putBoolean("fineDiningToggled", false);
+                    editor.putBoolean("Fine%20Dining", false);
                     Log.d("FineDining", "Not Checked");
                 }
                 break;
             case R.id.pubToggle:
                 if(pubToggle.isChecked() == true){
-                    editor.putBoolean("pubToggled", true);
+                    editor.putBoolean("Pub", true);
                     Log.d("Pub", "Checked");
                 }
                 else{
-                    editor.putBoolean("pubToggled", false);
+                    editor.putBoolean("Pub", false);
                     Log.d("Pub", "Not Checked");
                 }
                 break;
             case R.id.cafeToggle:
                 if(cafeToggle.isChecked() == true){
-                    editor.putBoolean("cafeToggled", true);
+                    editor.putBoolean("Cafe", true);
                     Log.d("Cafe", "Checked");
                 }
                 else{
-                    editor.putBoolean("cafeToggled", false);
+                    editor.putBoolean("Cafe", false);
                     Log.d("Cafe", "Not Checked");
                 }
                 break;
             case R.id.romanticToggle:
                 if(romanticToggle.isChecked() == true){
-                    editor.putBoolean("romanticToggled", true);
+                    editor.putBoolean("Romantic", true);
                     Log.d("Romantic", "Checked");
                 }
                 else{
-                    editor.putBoolean("romanticToggled", false);
+                    editor.putBoolean("Romantic", false);
                     Log.d("romantic", "Not Checked");
                 }
                 break;
             case R.id.buffetToggle:
                 if(buffetToggle.isChecked() == true){
-                    editor.putBoolean("buffetToggled", true);
+                    editor.putBoolean("Buffet", true);
                     Log.d("Buffet", "Checked");
                 }
                 else{
-                    editor.putBoolean("buffetToggled", false);
+                    editor.putBoolean("Buffet", false);
                     Log.d("Buffet", "Not Checked");
                 }
                 break;
             case R.id.asianToggle:
                 if(asianToggle.isChecked() == true){
-                    editor.putBoolean("asianToggled", true);
+                    editor.putBoolean("Asian", true);
                     Log.d("Asian", "Checked");
                 }
                 else{
-                    editor.putBoolean("asianToggled", false);
+                    editor.putBoolean("Asian", false);
                     Log.d("Asian", "Not Checked");
                 }
                 break;
             case R.id.burgerToggle:
                 if(burgerToggle.isChecked() == true){
-                    editor.putBoolean("burgerToggled", true);
+                    editor.putBoolean("Burger", true);
                     Log.d("Burger", "Checked");
                 }
                 else{
-                    editor.putBoolean("burgerToggled", false);
+                    editor.putBoolean("Burger", false);
                     Log.d("Burger", "Not Checked");
                 }
                 break;
             case R.id.pizzaToggle:
                 if(pizzaToggle.isChecked() == true){
-                    editor.putBoolean("pizzaToggled", true);
+                    editor.putBoolean("Pizza", true);
                     Log.d("Pizza", "Checked");
                 }
                 else{
-                    editor.putBoolean("pizzaToggled", false);
+                    editor.putBoolean("Pizza", false);
                     Log.d("Pizza", "Not Checked");
                 }
                 break;
             case R.id.indianToggle:
                 if(indianToggle.isChecked() == true){
-                    editor.putBoolean("indianToggled", true);
+                    editor.putBoolean("Indian", true);
                     Log.d("Indian", "Checked");
                 }
                 else{
-                    editor.putBoolean("indianToggled", false);
+                    editor.putBoolean("Indian", false);
                     Log.d("Indian", "Not Checked");
                 }
                 break;
             case R.id.sushiToggle:
                 if(sushiToggle.isChecked() == true){
-                    editor.putBoolean("sushiToggled", true);
+                    editor.putBoolean("Sushi", true);
                     Log.d("Sushi", "Checked");
                 }
                 else{
-                    editor.putBoolean("sushiToggled", false);
+                    editor.putBoolean("Sushi", false);
                     Log.d("Sushi", "Not Checked");
                 }
                 break;
             case R.id.meatToggle:
                 if(meatToggle.isChecked() == true){
-                    editor.putBoolean("meatToggled", true);
+                    editor.putBoolean("Meat", true);
                     Log.d("Meat", "Checked");
                 }
                 else{
-                    editor.putBoolean("meatToggled", false);
+                    editor.putBoolean("Meat", false);
                     Log.d("Meat", "Not Checked");
                 }
                 break;
             case R.id.seafoodToggle:
                 if(seafoodToggle.isChecked() == true){
-                    editor.putBoolean("seafoodToggled", true);
+                    editor.putBoolean("Sea%20Food", true);
                     Log.d("SeaFood", "Checked");
                 }
                 else{
-                    editor.putBoolean("seafoodToggled", false);
+                    editor.putBoolean("Sea%20Food", false);
                     Log.d("SeaFood", "Not Checked");
                 }
                 break;
             case R.id.italianToggle:
                 if(italianToggle.isChecked() == true){
-                    editor.putBoolean("italianToggled", true);
+                    editor.putBoolean("Italian", true);
                     Log.d("Italian", "Checked");
                 }
                 else{
-                    editor.putBoolean("italianToggled", false);
+                    editor.putBoolean("Italian", false);
                     Log.d("Italian", "Not Checked");
                 }
                 break;
             case R.id.vegetarianToggle:
                 if(vegetarianToggle.isChecked() == true){
-                    editor.putBoolean("vegetarianToggled", true);
+                    editor.putBoolean("Vegetarian", true);
                     Log.d("Vegetarian", "Checked");
                 }
                 else{
-                    editor.putBoolean("vegetarianToggled", false);
+                    editor.putBoolean("Vegetarian", false);
                     Log.d("Vegetarian", "Not Checked");
                 }
                 break;

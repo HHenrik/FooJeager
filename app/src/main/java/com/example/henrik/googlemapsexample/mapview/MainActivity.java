@@ -22,6 +22,7 @@ import android.widget.ListView;
 import com.example.henrik.googlemapsexample.R;
 import com.example.henrik.googlemapsexample.filtermenu.Activity_FilterMenu;
 import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
+import com.example.henrik.googlemapsexample.globalclasses.DatabaseHandler;
 import com.example.henrik.googlemapsexample.mainmenu.MainMenu;
 import com.example.henrik.googlemapsexample.restaurant.Restaurant;
 import com.example.henrik.googlemapsexample.restaurant.RestaurantActivity;
@@ -83,7 +84,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
     private float currentAccelerationValue = SensorManager.GRAVITY_EARTH;
     private float previousAccelerationValue = SensorManager.GRAVITY_EARTH;
     private float accelerationValue = 0.00f;
-
+    private boolean firstTimeStart;
     private int savedArraySize = 0;
 
     private ListView restaurantViewListView;
@@ -95,6 +96,15 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
     private int sortChooser = 0;
     private int numberOfHTMLpages = 0;
 
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private String SAVED_INFO = "savedFilters";
+
+    private ArrayList <String> restaurantFilters = new ArrayList();
+    private ArrayList <String> restaurantFiltersSorted = new ArrayList();
+
+    private ArrayList <String> restaurantFilteredID  = new ArrayList();
+    private ArrayList <Restaurant> filteredRestaurantList  = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +126,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         String json = gson.toJson(restaurantList);
         prefsEditor.putString("ResturantObjectList", json);
         prefsEditor.commit();
-        setUpAccelometer();
+        setUpAccelerometer();
         restaurantViewSlidePanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         restaurantViewListView = (ListView) findViewById(R.id.restaurantList);
 
@@ -126,22 +136,86 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, (GoogleApiClient.OnConnectionFailedListener) this)
                 .build();
+
 */
-      /*  DatabaseHandler handler = new DatabaseHandler(this);
+        setUpRestaurantFilterArray();
+        getfilteredID(restaurantFiltersSorted);
+
+       /* Log.d("before","filterResult");
+        DatabaseHandler handler = new DatabaseHandler(this);
+        Log.d("DatabaseHandler","filterResult");
         ArrayList<String> sven = new ArrayList();
         sven.add("Burger");
         sven.add("Romantic");
+
+
         handler.getRestaurantWithFilter(sven, new DatabaseHandler.callbackGetRestaurantWithFilter() {
+
             @Override
-            public void onSuccess(ArrayList<String> restaurantFilterList) {
-                Log.d(restaurantFilterList.get(0).toString(),"jaja");
-                for(int i=0;i<restaurantFilterList.size();i++)
-                Log.d(restaurantFilterList.get(i).toString(),"jaja");
+            public void onSuccess(ArrayList<String> restaurantList) {
+                Log.d("onSuccsess","filterResult");
+                Log.d(restaurantList.get(0).toString(),"filterResult");
+              for(int i=0;i<restaurantList.size();i++)
+                Log.d(restaurantList.get(i).toString(),"filterResult");
             }
         });*/
+        firstTimeStart = false;
     }
 
-    private void setUpAccelometer() {
+        // put your code here...
+    private void filterRestaurantList(){
+        Log.d(Integer.toString(restaurantFilteredID.size()),"restaurantFilterssize");
+        for(int i=0;i<restaurantFilteredID.size();i++){
+            for(int h=0;h<restaurantList.size();h++){
+                if(restaurantList.get(h).getId().equals(restaurantFilteredID.get(i))){
+                    filteredRestaurantList.add(restaurantList.get(h));
+                }
+            }
+        }
+    }
+
+    private void getfilteredID(ArrayList filterOptions){
+      //  Log.d(Integer.toString(filterOptions.size()),"IdOfFilters");
+        DatabaseHandler handler = new DatabaseHandler(this);
+        handler.getRestaurantWithFilter(filterOptions, new DatabaseHandler.callbackGetRestaurantWithFilter() {
+            @Override
+            public void onSuccess(ArrayList<String> restaurantList) {
+                    for(int i = 0;i<restaurantList.size();i++){
+                        Log.d("KorrektaId",restaurantList.get(i));
+                        restaurantFilteredID.add(restaurantList.get(i));
+                    }
+        }});
+    }
+    private void setUpRestaurantFilterArray(){
+        preferences = getSharedPreferences(SAVED_INFO, MODE_PRIVATE);
+        editor = preferences.edit();
+        restaurantFilters.add("Fast%20Food");
+        restaurantFilters.add("Fine%20Dining");
+        restaurantFilters.add("Pub");
+        restaurantFilters.add("Cafe");
+        restaurantFilters.add("Romantic");
+        restaurantFilters.add("Buffet");
+        restaurantFilters.add("Asian");
+        restaurantFilters.add("Burger");
+        restaurantFilters.add("Pizza");
+        restaurantFilters.add("Indian");
+        restaurantFilters.add("Sushi");
+        restaurantFilters.add("Meat");
+        restaurantFilters.add("Sea%20Food");
+        restaurantFilters.add("Italian");
+        restaurantFilters.add("Vegetarian");
+        Log.d(Integer.toString(restaurantFilters.size()),"IdOfFilters");
+
+        for(int i =0;i<14;i++){
+            if(preferences.getBoolean(restaurantFilters.get(i),false)){
+                restaurantFiltersSorted.add(restaurantFilters.get(i));
+            }
+        }
+
+
+    }
+
+    private void setUpAccelerometer() {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, sensor, sensorManager.SENSOR_DELAY_NORMAL);
@@ -158,7 +232,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         float accelerationValueChange = currentAccelerationValue - previousAccelerationValue;
         accelerationValue = accelerationValue * 0.9f + accelerationValueChange;
         if (accelerationValue > 15) {
-            randomNumberPrintJustForTest();
+            findRandomRestaurantOnAccelerometer();
         }
     }
 
@@ -169,7 +243,11 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
 
     protected void onResume() { //Tydligen tar listeners energi o cpukraft. Därför onResume samt onPause.
         super.onResume();
-        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if(firstTimeStart==false){
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+       //     setUpRestaurantFilterArray();
+         //   getfilteredID(restaurantFiltersSorted);
+        }
     }
 
     protected void onPause() {
@@ -177,14 +255,15 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         sensorManager.unregisterListener(this);
     }
 
-    private void randomNumberPrintJustForTest() {
-        int max = 10;
-        int min = 5;
-        int diff = max - min;
-        Random rn = new Random();
-        int i = rn.nextInt(diff + 1);
-        i += min;
-        Log.d(Integer.toString(i), "random number");
+    private void findRandomRestaurantOnAccelerometer() {
+        int maxValue = restaurantList.size()-1;
+        int minValue = 0;
+        int difference = maxValue - minValue;
+        Random random = new Random();
+        int result = random.nextInt(difference + 1);
+        result += minValue;
+        Log.d(Integer.toString(result), "random number");
+        zoomMapToMarker(restaurantList.get(result).getPosition(), 18);
     }
 
     private void zoomMapToMarker(LatLng markerLocation, int zoomValue) {
@@ -192,6 +271,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         map.animateCamera(CameraUpdateFactory.zoomIn());
         map.animateCamera(CameraUpdateFactory.zoomTo(zoomValue), 3000, null);
     }
+
 
     private void setRestaurantListView() {
 
@@ -223,9 +303,8 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         //for(int i=0;i<restaurantGoogleRatings.size();i++){
           //  Log.d(restaurantGoogleRatings.get(i).toString(),"Collections");
         //}
-
-
-        restaurantAdapter = new RestaurantAdapter(this, restaurantList);
+        filterRestaurantList();
+        restaurantAdapter = new RestaurantAdapter(this, filteredRestaurantList);
 
 
 
@@ -238,12 +317,29 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
             }
         });*/
         restaurantViewListView.setAdapter(restaurantAdapter);
+        hideFilteredMarkersFromMap();
+    }
+    private void hideFilteredMarkersFromMap(){
+        boolean removeMarker;
+        for(int i= 0;i<restaurantList.size();i++){
+            removeMarker = true;
+            for(int h=0;h<filteredRestaurantList.size();h++){
+                if(restaurantList.get(i).getName().equals(filteredRestaurantList.get(h).getName())){
+                    removeMarker = false;
+                    Log.d("Titta","matchar");
+                }
+            }
+            if(removeMarker){
+                restaurantList.get(i).getMarker().setVisible(false);
+                Log.d("Titta","sdfsdfds");
+            }
+        }
     }
     public void onSortButtonClicked(View view){
         sortChooser++;
             if(sortChooser==1){
                 sortRestarantList("Sorted on review", sortChooser);
-                Collections.reverse(restaurantList);
+                Collections.reverse(filteredRestaurantList);
             }
             else if (sortChooser==2)
                 sortRestarantList("Sorted on distance", sortChooser);
@@ -255,7 +351,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
     }
 
     private void sortRestarantList(String buttonMessage, final int sortType){
-        Collections.sort(restaurantList, new Comparator<Restaurant>() {
+        Collections.sort(filteredRestaurantList, new Comparator<Restaurant>() {
             public int compare(Restaurant leftRestaurant, Restaurant rightRestaurant) {
                 if(sortType==1)
                     return leftRestaurant.getGoogleRating().compareTo(rightRestaurant.getGoogleRating());
@@ -272,8 +368,8 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
 
         ArrayList<Restaurant> restaurantTempArray = new ArrayList();
 
-      for(int i = 0;i<restaurantList.size();i++){
-          restaurantTempArray.add(restaurantList.get(i));
+      for(int i = 0;i<filteredRestaurantList.size();i++){
+          restaurantTempArray.add(filteredRestaurantList.get(i));
       }
 
         restaurantAdapter.clear();
@@ -554,8 +650,8 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                 } else {
                     restaurantDetail = false;
                     Log.d(Integer.toString(restaurantList.size()),"Arraylistsize");
-                    sortRestarantList("Sorted on names",5);
                     setRestaurantListView();
+                    sortRestarantList("Sorted on names",5);
                     panelListener();
                     for(int i=0;i<restaurantList.size();i++){
                         Log.d(restaurantList.get(i).getName(),"RestaurantName");
