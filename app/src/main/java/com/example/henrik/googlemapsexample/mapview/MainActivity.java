@@ -101,13 +101,13 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private String SAVED_INFO = "savedFilters";
-
+    private boolean firstResume = false;
     private ArrayList <String> restaurantFilters = new ArrayList();
     private ArrayList <String> restaurantFiltersSorted = new ArrayList();
 
     private ArrayList <String> restaurantFilteredID  = new ArrayList();
     private ArrayList <Restaurant> filteredRestaurantList  = new ArrayList();
-
+    private boolean skit = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         preferences = getSharedPreferences(SAVED_INFO, MODE_PRIVATE);
@@ -188,9 +188,17 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                     for(int i = 0;i<restaurantList.size();i++){
                         Log.d("KorrektaId",restaurantList.get(i));
                         if(!restaurantFilteredID.contains(restaurantList.get(i))) //contains ska jag sätta på andra ställen också istället för onödiga loopar!!!!
-                        restaurantFilteredID.add(restaurantList.get(i));
+                             restaurantFilteredID.add(restaurantList.get(i));
 
                     }
+                    if (skit) {
+                        filterRestaurantList();
+                        hideFilteredMarkersFromMap();
+                        sortRestarantList("Sorted on Names",4);
+
+                    }
+
+
                 }
 
 
@@ -198,6 +206,16 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
             if (databaseIsOnline == false){
                 //Gör så att alla syns
             }
+        }
+      else if(firstResume==true&&restaurantFiltersSorted.size()==0){
+           for(int i = 0;i<restaurantList.size();i++){
+               restaurantList.get(i).getMarker().setVisible(false);
+           }
+        }
+        else if(firstResume==true&&restaurantFiltersSorted.size()==15){
+            filteredRestaurantList = restaurantList;
+            hideFilteredMarkersFromMap();
+            sortRestarantList("Sorted on Names",4);
         }
 
 
@@ -310,13 +328,25 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         super.onResume();
 
         if(firstTimeStart){
+            firstResume = true;
+            skit = true;
+            restaurantFilters.clear();
+            restaurantFiltersSorted.clear();
+            restaurantFilteredID.clear();
+            filteredRestaurantList.clear();
+
             restaurantList = DataStorage.getInstance().getRestaurantList();
+
+            for(int i=0;i<restaurantList.size();i++){
+                Log.d("svenssonsson","sven");
+                restaurantList.get(i).getMarker().setVisible(true);
+            }
             Log.d("Resume","onResume");
             setUpRestaurantFilterArray();
             getfilteredID(restaurantFiltersSorted);
+
            // setRestaurantListView();
-            sortRestarantList("Sorted on Names",4);
-            hideFilteredMarkersFromMap();
+
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
         firstTimeStart = true;
@@ -358,13 +388,14 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         restaurantViewListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for (int i = 0; i < restaurantList.size(); i++) {
-                   if (restaurantList.get(i).getName().equals(restaurantList.get(position).getName())) {
-                        restaurantList.get(i).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                        if (previusClickedID != restaurantList.size() + 1) {
-                           restaurantList.get(previusClickedID).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                previusClickedID = filteredRestaurantList.size() + 1;
+                for (int i = 0; i < filteredRestaurantList.size(); i++) {
+                   if (filteredRestaurantList.get(i).getName().equals(filteredRestaurantList.get(position).getName())) {
+                       filteredRestaurantList.get(i).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                        if (previusClickedID != filteredRestaurantList.size() + 1) {
+                            filteredRestaurantList.get(previusClickedID).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                         }
-                        zoomMapToMarker(restaurantList.get(i).getPosition(),18);
+                        zoomMapToMarker(filteredRestaurantList.get(i).getPosition(),18);
                         previusClickedID = i;
                     }
 
@@ -401,6 +432,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
     }
     private void hideFilteredMarkersFromMap(){
         Log.d(Integer.toString(restaurantFiltersSorted.size()),"dsdfds");
+        Log.d(Integer.toString(filteredRestaurantList.size()),"SeHajajaa");
         if(restaurantFiltersSorted.size()!=15) {
 
 
@@ -767,7 +799,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
 
 
 
-            previusClickedID = restaurantList.size() + 1;
+
 
             //  sortRestaurantOnReviews();
             if (numberOfHTMLpages<3 && restaurantDetailActivated) {
