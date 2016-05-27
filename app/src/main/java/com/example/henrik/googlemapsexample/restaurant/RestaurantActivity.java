@@ -187,9 +187,11 @@ public class RestaurantActivity extends AppCompatActivity {
         if (restaurantList.get(restaurantID).getOpenNow()) {
             //openNowStatus.setImageResource(R.drawable.open);
             Log.d("Open Satuts true",String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
+            Log.d(restaurantList.get(restaurantID).getName(),String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
         } else {
-            // openNowStatus.setImageResource(R.drawable.closed);
+            //openNowStatus.setImageResource(R.drawable.closed);
             Log.d("Open Satuts false",String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
+            Log.d(restaurantList.get(restaurantID).getName(),String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
         }
 
     }

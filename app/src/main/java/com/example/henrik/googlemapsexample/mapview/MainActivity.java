@@ -871,6 +871,13 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                         catch (JSONException exception) {
                             restaurant.setPriceLevel("0");
                         }
+                        try{
+                            JSONObject openHours = jsonObjectRestaurant.getJSONObject("opening_hours");
+                            restaurant.setOpenNow(openHours.getBoolean("open_now"));
+                        }
+                        catch (JSONException exception) {
+                            restaurant.setOpenNow(false);
+                        }
 
 
 
