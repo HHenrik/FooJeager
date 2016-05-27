@@ -30,6 +30,8 @@ public class DatabaseHandler {
 
     String IP = "194.47.41.188";
 
+            //"194.47.41.188";
+
     public DatabaseHandler(Context context){
         this.context = context;
     }
@@ -361,7 +363,7 @@ public class DatabaseHandler {
     }
 
     public void getRestaurantWithFilter(ArrayList<String> filterList, final callbackGetRestaurantWithFilter callback){
-        String sql = "filter_sort%=27" + filterList.get(0) + "%27";
+        String sql = "filter_sort=%27" + filterList.get(0) + "%27";
         //String sql = "SELECT * FROM restaurant_has_filter WHERE filter_sort='" + filterList.get(0) + "'";
         for(int i = 1; i < filterList.size(); i++) {
             sql += "%20OR%20filter_sort=%27" + filterList.get(i) + "%27";
@@ -383,6 +385,7 @@ public class DatabaseHandler {
                     Log.d("respone","      abbbbbbbbbbadasdasb           " + response);
                     //JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"), response.lastIndexOf("}") + 1));
                     JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"), response.lastIndexOf("}") + 1));//response normalt
+                    Log.d("JsonObjet: ", "" + jsonObject);
                     Log.d("JSONOBJECT","                JSONOBJECT     " + jsonObject.toString());
                     JSONArray result = jsonObject.getJSONArray("result");
                     int numberOfResultsGathered = 0;
@@ -407,6 +410,7 @@ public class DatabaseHandler {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //Toast.makeText(MainActivity.this, error.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        Log.d("wooooooooowwwwweeee","Error med restaurantfilter stuff blab   " + error);
                     }
                 });
 

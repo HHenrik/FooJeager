@@ -4,6 +4,7 @@ package com.example.henrik.googlemapsexample.userprofile;
 
 //Android imports
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,6 +46,7 @@ public class Activity_UserProfile extends AppCompatActivity {
 
     private DatabaseHandler dbHandler = new DatabaseHandler(this);
     private User mainUser;
+    private Context context;
 
 //---------------------------------------ON-CREATION----------------------------------------------\\
     @Override
@@ -60,7 +62,7 @@ public class Activity_UserProfile extends AppCompatActivity {
         //Check in the stored preferences if it is the first time the application starts on this phone
         firstAppStart = preferences.getBoolean("firstAppStart", true);
         Intent intent = getIntent();
-
+        context = getApplicationContext();
 
         Log.d("BEFORE", " LOOP");
         if(DataStorage.getInstance().isFromReview() == true){
@@ -73,27 +75,27 @@ public class Activity_UserProfile extends AppCompatActivity {
             Log.d("DEVICE ID: ", androidId);
         }
 
-        DataStorage.getInstance().setFromReview(false);
-
-
-
         if(firstAppStart == true && DataStorage.getInstance().isFromReview() == false){
             //If it is the first time do the following:
 
             //Create a pop-up dialog that prompts the user to enter a username
             createAlertDialog();
+
         }
         else{
+            DataStorage.getInstance().setFromReview(false);
+            Log.d("Doing other shiz", "pew");
           //If it is not the first time, do the following:
            getUserData(androidId);
 
             //Load recent reviews by user from the database
-            setRecentReviews();
+            setRecentReviews(androidId);
 
             //For testing
             //editor.clear();
             //editor.commit();
             //---------------
+
         }
 
     }
@@ -124,7 +126,7 @@ public class Activity_UserProfile extends AppCompatActivity {
                         createUser(androidId, userInput.getText().toString());
 
                         //Load recent reviews by user from the database
-                        setRecentReviews();
+                        setRecentReviews(androidId);
                     }
                 })
 
@@ -138,6 +140,7 @@ public class Activity_UserProfile extends AppCompatActivity {
 
                                 //Shut down the dialog
                                 dialog.cancel();
+                                finish();
                             }
                         });
 
@@ -176,19 +179,21 @@ public class Activity_UserProfile extends AppCompatActivity {
         levelDisplay.setText("Lv. " + level);
     }
 
-    public void setRecentReviews(){
-        recentReviewsList.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Mannen i restaurangen vet inte att han snart kommer bli sparkad", "", "", ""));
-        recentReviewsList.add(new ReviewObject(0, 2, 0, 0, 0, 0, 0, 0, "Möglig mat men den var ändå ätbar. Otrevlig personal men jag återkommer ändå.", "", "", ""));
-        recentReviewsList.add(new ReviewObject(0, 5, 0, 0, 0, 0, 0, 0, "Top notch, fan rätt schysst asså! Äter mer än gärna här igen.", "", "", ""));
-        recentReviewsList.add(new ReviewObject(0, 4, 0, 0, 0, 0, 0, 0, "", "", "", ""));
-        recentReviewsList.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Inte mycket att hänga i granen men helt ok", "", "", ""));
-        recentReviewsList.add(new ReviewObject(0, 5, 0, 0, 0, 0, 0, 0, "https://www.youtube.com/channel/UCPlV0OpQMImKviSTWHJEDi", "", "", ""));
-        recentReviewsList.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Äter hellre på khai mui.", "", "", ""));
+    public void setRecentReviews(String androidId){
+        dbHandler.getAllReviewsFromUser(androidId, new DatabaseHandler.callbackGetAllReviewsFromUser() {
+            @Override
+            public void onSuccess(ArrayList<ReviewObject> reviewList) {
+                recentReviewsList = reviewList;
+                final ListView recentReviews = (ListView) findViewById(R.id.recentReviews);
+                adapter = new ReviewAdapter(context, recentReviewsList);
 
-        final ListView recentReviews = (ListView) findViewById(R.id.recentReviews);
-        adapter = new ReviewAdapter(this, recentReviewsList);
+                recentReviews.setAdapter(adapter);
+            }
+        });
 
-        recentReviews.setAdapter(adapter);
+
+
+
     }
 
     private void getUserData(String deviceId){

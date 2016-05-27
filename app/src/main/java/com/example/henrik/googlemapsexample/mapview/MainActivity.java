@@ -22,6 +22,7 @@ import android.widget.ListView;
 import com.example.henrik.googlemapsexample.R;
 import com.example.henrik.googlemapsexample.filtermenu.Activity_FilterMenu;
 import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
+import com.example.henrik.googlemapsexample.globalclasses.DatabaseHandler;
 import com.example.henrik.googlemapsexample.mainmenu.MainMenu;
 import com.example.henrik.googlemapsexample.restaurant.Restaurant;
 import com.example.henrik.googlemapsexample.restaurant.RestaurantActivity;
@@ -69,10 +70,12 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
     private int savedObjectId;
     private SlidingUpPanelLayout restaurantViewSlidePanel;
     private Restaurant restaurantTemp;
+    private boolean databaseIsOnline = false;
     //private ArrayList<String> restaurantNames = new ArrayList();
     //private ArrayList<Float> restaurantGoogleRatings = new ArrayList();
     //private ArrayList<Float> restaurantLocations = new ArrayList();
 
+    private boolean markerHiding = false;
     private boolean loadingisDone = false;
     private boolean restaurantDetailActivated = false;
     private Sensor sensor;
@@ -83,7 +86,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
     private float currentAccelerationValue = SensorManager.GRAVITY_EARTH;
     private float previousAccelerationValue = SensorManager.GRAVITY_EARTH;
     private float accelerationValue = 0.00f;
-
+    private boolean firstTimeStart = true;
     private int savedArraySize = 0;
 
     private ListView restaurantViewListView;
@@ -95,9 +98,19 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
     private int sortChooser = 0;
     private int numberOfHTMLpages = 0;
 
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private String SAVED_INFO = "savedFilters";
+    private boolean firstResume = false;
+    private ArrayList <String> restaurantFilters = new ArrayList();
+    private ArrayList <String> restaurantFiltersSorted = new ArrayList();
 
+    private ArrayList <String> restaurantFilteredID  = new ArrayList();
+    private ArrayList <Restaurant> filteredRestaurantList  = new ArrayList();
+    private boolean skit = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        preferences = getSharedPreferences(SAVED_INFO, MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         resturantMarkers = new Marker[60];//Max antal restauranger som visas
@@ -116,7 +129,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         String json = gson.toJson(restaurantList);
         prefsEditor.putString("ResturantObjectList", json);
         prefsEditor.commit();
-        setUpAccelometer();
+        setUpAccelerometer();
         restaurantViewSlidePanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         restaurantViewListView = (ListView) findViewById(R.id.restaurantList);
 
@@ -126,22 +139,165 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, (GoogleApiClient.OnConnectionFailedListener) this)
                 .build();
+
 */
-      /*  DatabaseHandler handler = new DatabaseHandler(this);
+     //   setUpRestaurantFilterArray();
+        setUpRestaurantFilterArray();
+        getfilteredID(restaurantFiltersSorted);
+
+       /* Log.d("before","filterResult");
+        DatabaseHandler handler = new DatabaseHandler(this);
+        Log.d("DatabaseHandler","filterResult");
         ArrayList<String> sven = new ArrayList();
         sven.add("Burger");
         sven.add("Romantic");
+
+
         handler.getRestaurantWithFilter(sven, new DatabaseHandler.callbackGetRestaurantWithFilter() {
+
             @Override
-            public void onSuccess(ArrayList<String> restaurantFilterList) {
-                Log.d(restaurantFilterList.get(0).toString(),"jaja");
-                for(int i=0;i<restaurantFilterList.size();i++)
-                Log.d(restaurantFilterList.get(i).toString(),"jaja");
+            public void onSuccess(ArrayList<String> restaurantList) {
+                Log.d("onSuccsess","filterResult");
+                Log.d(restaurantList.get(0).toString(),"filterResult");
+              for(int i=0;i<restaurantList.size();i++)
+                Log.d(restaurantList.get(i).toString(),"filterResult");
             }
         });*/
+        firstTimeStart = false;
     }
 
-    private void setUpAccelometer() {
+        // put your code here...
+    private void filterRestaurantList(){
+        for(int i=0;i<restaurantFilteredID.size();i++){
+            for(int h=0;h<restaurantList.size();h++){
+                if(restaurantList.get(h).getId().equals(restaurantFilteredID.get(i))){
+                    filteredRestaurantList.add(restaurantList.get(h));
+                }
+            }
+        }
+    }
+
+    private void getfilteredID(ArrayList filterOptions){
+      //  Log.d(Integer.toString(filterOptions.size()),"IdOfFilters");
+        if(restaurantFiltersSorted.size()!=0&&restaurantFiltersSorted.size()!=15){
+            DatabaseHandler handler = new DatabaseHandler(this);
+            handler.getRestaurantWithFilter(filterOptions, new DatabaseHandler.callbackGetRestaurantWithFilter() {
+                @Override
+                public void onSuccess(ArrayList<String> restaurantList) {
+                    databaseIsOnline = true;
+                    for(int i = 0;i<restaurantList.size();i++){
+                        Log.d("KorrektaId",restaurantList.get(i));
+                        if(!restaurantFilteredID.contains(restaurantList.get(i))) //contains ska jag sätta på andra ställen också istället för onödiga loopar!!!!
+                             restaurantFilteredID.add(restaurantList.get(i));
+
+                    }
+                    if (skit) {
+                        filterRestaurantList();
+                        hideFilteredMarkersFromMap();
+                        sortRestarantList("Sorted on Names",4);
+
+                    }
+
+
+                }
+
+
+            });
+            if (databaseIsOnline == false){
+                //Gör så att alla syns
+            }
+        }
+      else if(firstResume==true&&restaurantFiltersSorted.size()==0){
+           for(int i = 0;i<restaurantList.size();i++){
+               restaurantList.get(i).getMarker().setVisible(false);
+           }
+        }
+        else if(firstResume==true&&restaurantFiltersSorted.size()==15){
+            filteredRestaurantList = restaurantList;
+            hideFilteredMarkersFromMap();
+            sortRestarantList("Sorted on Names",4);
+        }
+
+
+    }
+    private void setUpRestaurantFilterArray(){
+        preferences = getSharedPreferences(SAVED_INFO, MODE_PRIVATE);
+        restaurantFilters.add("Fast%20Food");
+        restaurantFilters.add("Fine%20Dining");
+        restaurantFilters.add("Pub");
+        restaurantFilters.add("Cafe");
+        restaurantFilters.add("Romantic");
+        restaurantFilters.add("Buffet");
+        restaurantFilters.add("Asian");
+        restaurantFilters.add("Burger");
+        restaurantFilters.add("Pizza");
+        restaurantFilters.add("Indian");
+        restaurantFilters.add("Sushi");
+        restaurantFilters.add("Meat");
+        restaurantFilters.add("Sea%20Food");
+        restaurantFilters.add("Italian");
+        restaurantFilters.add("Vegetarian");
+
+       for(int i = 0;i<15;i++) {
+           if (preferences.getBoolean(restaurantFilters.get(i), true)) {
+               restaurantFiltersSorted.add(restaurantFilters.get(i));
+           }
+       } Log.d(Integer.toString(restaurantFiltersSorted.size()),"fsgdghd");
+/*
+        if(preferences.getBoolean(restaurantFilters.get(0),true)){
+                restaurantFiltersSorted.add(restaurantFilters.get(0));
+        }
+        if(preferences.getBoolean(restaurantFilters.get(1),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(1));
+        }
+        if(preferences.getBoolean(restaurantFilters.get(2),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(2));
+        }
+        if(preferences.getBoolean(restaurantFilters.get(3),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(3));
+        }
+        if(preferences.getBoolean(restaurantFilters.get(4),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(4));
+        }
+        if(preferences.getBoolean(restaurantFilters.get(5),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(5));
+        }
+        if(preferences.getBoolean(restaurantFilters.get(6),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(6));
+        }
+        if(preferences.getBoolean(restaurantFilters.get(7),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(7));
+        }
+        if(preferences.getBoolean(restaurantFilters.get(8),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(8));
+        }
+
+        if(preferences.getBoolean(restaurantFilters.get(9),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(9));
+        }
+
+        if(preferences.getBoolean(restaurantFilters.get(10),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(10));
+        }
+        if(preferences.getBoolean(restaurantFilters.get(11),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(11));
+        }
+        if(preferences.getBoolean(restaurantFilters.get(12),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(12));
+        }
+        if(preferences.getBoolean(restaurantFilters.get(13),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(13));
+        }
+        if(preferences.getBoolean(restaurantFilters.get(14),true)){
+            restaurantFiltersSorted.add(restaurantFilters.get(14));
+        }
+
+        Log.d(Integer.toString(restaurantFiltersSorted.size()),"hasfhuuiusduif");
+*/
+
+    }
+
+    private void setUpAccelerometer() {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, sensor, sensorManager.SENSOR_DELAY_NORMAL);
@@ -158,7 +314,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         float accelerationValueChange = currentAccelerationValue - previousAccelerationValue;
         accelerationValue = accelerationValue * 0.9f + accelerationValueChange;
         if (accelerationValue > 15) {
-            randomNumberPrintJustForTest();
+            findRandomRestaurantOnAccelerometer();
         }
     }
 
@@ -167,9 +323,33 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
 
     }
 
+    @Override
     protected void onResume() { //Tydligen tar listeners energi o cpukraft. Därför onResume samt onPause.
         super.onResume();
-        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        if(firstTimeStart){
+            firstResume = true;
+            skit = true;
+            restaurantFilters.clear();
+            restaurantFiltersSorted.clear();
+            restaurantFilteredID.clear();
+            filteredRestaurantList.clear();
+
+            restaurantList = DataStorage.getInstance().getRestaurantList();
+
+            for(int i=0;i<restaurantList.size();i++){
+                Log.d("svenssonsson","sven");
+                restaurantList.get(i).getMarker().setVisible(true);
+            }
+            Log.d("Resume","onResume");
+            setUpRestaurantFilterArray();
+            getfilteredID(restaurantFiltersSorted);
+
+           // setRestaurantListView();
+
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        firstTimeStart = true;
     }
 
     protected void onPause() {
@@ -177,14 +357,21 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         sensorManager.unregisterListener(this);
     }
 
-    private void randomNumberPrintJustForTest() {
-        int max = 10;
-        int min = 5;
-        int diff = max - min;
-        Random rn = new Random();
-        int i = rn.nextInt(diff + 1);
-        i += min;
-        Log.d(Integer.toString(i), "random number");
+    private void findRandomRestaurantOnAccelerometer() {
+       /* for(int i=0;i<restaurantList.size()
+        ;i++){
+            restaurantList.get(i).getMarker().setVisible(true);
+        }*/
+        if(markerHiding){
+            int maxValue = filteredRestaurantList.size()-1; //restaurantList
+            int minValue = 0;
+            int difference = maxValue - minValue;
+            Random random = new Random();
+            int result = random.nextInt(difference + 1);
+            result += minValue;
+            Log.d(Integer.toString(result), "random number");
+            zoomMapToMarker(filteredRestaurantList.get(result).getPosition(), 18);//restaurantList
+        }
     }
 
     private void zoomMapToMarker(LatLng markerLocation, int zoomValue) {
@@ -193,6 +380,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         map.animateCamera(CameraUpdateFactory.zoomTo(zoomValue), 3000, null);
     }
 
+
     private void setRestaurantListView() {
 
 
@@ -200,13 +388,14 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
         restaurantViewListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for (int i = 0; i < restaurantList.size(); i++) {
-                   if (restaurantList.get(i).getName().equals(restaurantList.get(position).getName())) {
-                        restaurantList.get(i).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                        if (previusClickedID != restaurantList.size() + 1) {
-                           restaurantList.get(previusClickedID).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                previusClickedID = filteredRestaurantList.size() + 1;
+                for (int i = 0; i < filteredRestaurantList.size(); i++) {
+                   if (filteredRestaurantList.get(i).getName().equals(filteredRestaurantList.get(position).getName())) {
+                       filteredRestaurantList.get(i).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                        if (previusClickedID != filteredRestaurantList.size() + 1) {
+                            filteredRestaurantList.get(previusClickedID).getMarker().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                         }
-                        zoomMapToMarker(restaurantList.get(i).getPosition(),18);
+                        zoomMapToMarker(filteredRestaurantList.get(i).getPosition(),18);
                         previusClickedID = i;
                     }
 
@@ -224,8 +413,9 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
           //  Log.d(restaurantGoogleRatings.get(i).toString(),"Collections");
         //}
 
-
-        restaurantAdapter = new RestaurantAdapter(this, restaurantList);
+        filterRestaurantList();
+        hideFilteredMarkersFromMap();
+        restaurantAdapter = new RestaurantAdapter(this, filteredRestaurantList);
 
 
 
@@ -238,12 +428,52 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
             }
         });*/
         restaurantViewListView.setAdapter(restaurantAdapter);
+
+    }
+    private void hideFilteredMarkersFromMap(){
+        Log.d(Integer.toString(restaurantFiltersSorted.size()),"dsdfds");
+        Log.d(Integer.toString(filteredRestaurantList.size()),"SeHajajaa");
+        if(restaurantFiltersSorted.size()!=15) {
+
+
+            boolean removeMarker;
+            for (int i = 0; i < restaurantList.size(); i++) {           //Bytt till contain istället för dubbelloop
+                removeMarker = true;
+                for (int h = 0; h < filteredRestaurantList.size(); h++) {
+                    if (restaurantList.get(i).getName().equals(filteredRestaurantList.get(h).getName())) {
+                        removeMarker = false;
+                        restaurantList.get(i).getMarker().setVisible(true);
+                        Log.d("Titta", "matchar");
+                    }
+                }
+                if (removeMarker) {
+                    restaurantList.get(i).getMarker().setVisible(false);
+                    Log.d("Titta", "sdfsdfds");
+                }
+            }
+            //Ny förbättrad inte testad
+           /* for(int i=0;i<restaurantList.size();i++){
+                if(!filteredRestaurantList.contains(restaurantList.get(i))){
+                    restaurantList.get(i).getMarker().setVisible(false);
+                }
+                else{
+                    restaurantList.get(i).getMarker().setVisible(true);
+                }
+            }*/
+        }
+        else{
+            filteredRestaurantList = restaurantList;
+            for(int i=0;i<restaurantList.size();i++){
+                restaurantList.get(i).getMarker().setVisible(true);
+            }
+        }
+        markerHiding = true;
     }
     public void onSortButtonClicked(View view){
         sortChooser++;
             if(sortChooser==1){
                 sortRestarantList("Sorted on review", sortChooser);
-                Collections.reverse(restaurantList);
+                Collections.reverse(filteredRestaurantList);
             }
             else if (sortChooser==2)
                 sortRestarantList("Sorted on distance", sortChooser);
@@ -255,7 +485,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
     }
 
     private void sortRestarantList(String buttonMessage, final int sortType){
-        Collections.sort(restaurantList, new Comparator<Restaurant>() {
+        Collections.sort(filteredRestaurantList, new Comparator<Restaurant>() {
             public int compare(Restaurant leftRestaurant, Restaurant rightRestaurant) {
                 if(sortType==1)
                     return leftRestaurant.getGoogleRating().compareTo(rightRestaurant.getGoogleRating());
@@ -272,8 +502,8 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
 
         ArrayList<Restaurant> restaurantTempArray = new ArrayList();
 
-      for(int i = 0;i<restaurantList.size();i++){
-          restaurantTempArray.add(restaurantList.get(i));
+      for(int i = 0;i<filteredRestaurantList.size();i++){
+          restaurantTempArray.add(filteredRestaurantList.get(i));
       }
 
         restaurantAdapter.clear();
@@ -554,8 +784,8 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                 } else {
                     restaurantDetail = false;
                     Log.d(Integer.toString(restaurantList.size()),"Arraylistsize");
-                    sortRestarantList("Sorted on names",5);
                     setRestaurantListView();
+                    sortRestarantList("Sorted on names",4);
                     panelListener();
                     for(int i=0;i<restaurantList.size();i++){
                         Log.d(restaurantList.get(i).getName(),"RestaurantName");
@@ -569,7 +799,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
 
 
 
-            previusClickedID = restaurantList.size() + 1;
+
 
             //  sortRestaurantOnReviews();
             if (numberOfHTMLpages<3 && restaurantDetailActivated) {
@@ -598,7 +828,9 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                 for (int i = 0; i < reviews.length(); i++) {
                     JSONObject reviewIndex = reviews.getJSONObject(i);
                     ReviewObject restaurantReviews = new ReviewObject(0, Float.parseFloat(reviewIndex.getString("rating")), 0, 0, 0, 0, 0, 0, reviewIndex.getString("text"), "", "", "");
+                    restaurantReviews.setUser(reviewIndex.getString("author_name"));
                     reviewArray.add(i, restaurantReviews);
+
                 }
                 DataStorage.getInstance().getRestaurantList().get(savedObjectId).setReviews(reviewArray);
 
@@ -670,6 +902,13 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
                         }
                         catch (JSONException exception) {
                             restaurant.setPriceLevel("0");
+                        }
+                        try{
+                            JSONObject openHours = jsonObjectRestaurant.getJSONObject("opening_hours");
+                            restaurant.setOpenNow(openHours.getBoolean("open_now"));
+                        }
+                        catch (JSONException exception) {
+                            restaurant.setOpenNow(false);
                         }
 
 

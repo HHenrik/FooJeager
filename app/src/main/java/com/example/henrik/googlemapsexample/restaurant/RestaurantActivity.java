@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,26 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
 import com.example.henrik.googlemapsexample.R;
-import com.example.henrik.googlemapsexample.review.ReviewViewer;
 import com.example.henrik.googlemapsexample.fragments.Website_fragment;
+import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
+import com.example.henrik.googlemapsexample.review.ReviewViewer;
 import com.example.henrik.googlemapsexample.review.WriteReview;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -198,8 +186,12 @@ public class RestaurantActivity extends AppCompatActivity {
         openNowStatus = (ImageView) findViewById(R.id.openNow);
         if (restaurantList.get(restaurantID).getOpenNow()) {
             //openNowStatus.setImageResource(R.drawable.open);
+            Log.d("Open Satuts true",String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
+            Log.d(restaurantList.get(restaurantID).getName(),String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
         } else {
-            // openNowStatus.setImageResource(R.drawable.closed);
+            //openNowStatus.setImageResource(R.drawable.closed);
+            Log.d("Open Satuts false",String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
+            Log.d(restaurantList.get(restaurantID).getName(),String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
         }
 
     }

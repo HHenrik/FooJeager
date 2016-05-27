@@ -22,8 +22,10 @@ import com.example.henrik.googlemapsexample.globalclasses.DatabaseHandler;
 import com.example.henrik.googlemapsexample.restaurant.Restaurant;
 import com.example.henrik.googlemapsexample.restaurant.RestaurantActivity;
 import com.example.henrik.googlemapsexample.review.ReviewDetailed;
+import com.example.henrik.googlemapsexample.review.ReviewObject;
 
 //Java imports
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -44,9 +46,10 @@ public class Activity_Favourites extends AppCompatActivity {
 
     private Set<String> markedFavIds;
     private List loadedFavList;
-    private int counter = 0;
     private ArrayList<Integer> indexContainer = new ArrayList<>();
+    private ArrayList<Double> storedAverageValues = new ArrayList<>();
     double average;
+    int amountOfLoads;
 //---------------------------------------ON-CREATION----------------------------------------------\\
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class Activity_Favourites extends AppCompatActivity {
 
         preferences = getSharedPreferences(SAVED_INFO, MODE_PRIVATE);
         editor = preferences.edit();
+
     }
 
     @Override
@@ -63,35 +67,45 @@ public class Activity_Favourites extends AppCompatActivity {
         super.onResume();
         favouriteList.clear();
 
+
         restaurantList = DataStorage.getInstance().getRestaurantList();
         markedFavIds = preferences.getStringSet("markedFavs", new HashSet<String>());
         loadedFavList = new ArrayList(markedFavIds);
 
-        for(int i = 0; i < loadedFavList.size(); i++){
+        for(int i = 0; i < loadedFavList.size(); i++) {
             Log.d("INDEX " + String.valueOf(i), " = " + loadedFavList.get(i));
+
+            dbHandler.getReviewAvarageFromRestaurant(loadedFavList.get(i).toString(), new DatabaseHandler.callbackGetReviewAvarageFromRestaurant() {
+                @Override
+                public void onSuccess(double avarage) {
+                    average = avarage;
+                    Log.d("AVERAGE RATING: ", String.valueOf(average));
+
+                }
+            });
+
+        }
+
+        amountOfLoads = 0;
+        while(amountOfLoads < loadedFavList.size()) {
+            storedAverageValues = getAverages();
         }
 
         for(int i = 0; i < loadedFavList.size(); i++){
             for(int j = 0; j < restaurantList.size(); j++){
+
+
                 if(loadedFavList.get(i).equals(restaurantList.get(j).getId())){
                     Log.d("HIT INDEX: ", "Loaded: " + String.valueOf(i) + " Restaurant" + String.valueOf(j));
-
-
-                    dbHandler.getReviewAvarageFromRestaurant(restaurantList.get(j).getId(), new DatabaseHandler.callbackGetReviewAvarageFromRestaurant() {
-                        @Override
-                        public void onSuccess(double avarage) {
-                            average = avarage;
-                            Log.d("AVERAGE RATING: ", String.valueOf(average));
-                        }
-                    });
-
-                    favouriteList.add(new Object_Favourite(i+1, restaurantList.get(j).getId(), restaurantList.get(j).getName(), Float.parseFloat(Double.toString(average))));
+                    favouriteList.add(new Object_Favourite(i+1, restaurantList.get(j).getId(), restaurantList.get(j).getName(), Float.parseFloat(Double.toString(storedAverageValues.get(i)))));
                     indexContainer.add(j);
                 }
 
+
+
+
                 Log.d("INNER LOOP TURN: ", String.valueOf(j));
             }
-
             Log.d("OUTER LOOP TURN: ", String.valueOf(i));
 
         }
@@ -111,5 +125,24 @@ public class Activity_Favourites extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
+
+    private ArrayList<Double> getAverages(){
+        final ArrayList<Double> tempList = new ArrayList<>();
+
+        for(int i = 0; i < loadedFavList.size();i++) {
+            dbHandler.getReviewAvarageFromRestaurant(loadedFavList.get(i).toString(), new DatabaseHandler.callbackGetReviewAvarageFromRestaurant() {
+                @Override
+                public void onSuccess(double avarage) {
+                    Log.d("AVERAGE RATING: ", String.valueOf(avarage));
+                    tempList.add(avarage);
+                    amountOfLoads++;
+                }
+            });
+        }
+
+        return tempList;
+    }
+
 }
