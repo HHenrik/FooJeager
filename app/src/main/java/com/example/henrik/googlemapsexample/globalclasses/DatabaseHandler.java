@@ -30,6 +30,8 @@ public class DatabaseHandler {
 
     String IP = "194.47.41.188";
 
+            //"194.47.41.188";
+
     public DatabaseHandler(Context context){
         this.context = context;
     }
