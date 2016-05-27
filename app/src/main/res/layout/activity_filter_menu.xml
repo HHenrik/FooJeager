@@ -60,12 +60,13 @@
                 android:layout_height="100dp"
                 android:id="@+id/fastFoodToggle"
                 android:onClick="updatePreferences"
-                android:checked="false"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignTop="@+id/fineDiningToggle"
-                android:textOff="Fast food \n = No"
-                android:textOn="Fast food \n = Yes" />
+                android:background="@drawable/fastfood_toggle"
+                android:checked="false"
+                android:textColor="#00ffffff"
+                />
 
             <ToggleButton
                 android:layout_width="100dp"
@@ -74,11 +75,13 @@
                 android:id="@+id/fineDiningToggle"
                 android:layout_below="@+id/priceAdjuster"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/finedining_toggle"
                 android:onClick="onToggleClicked"
                 android:checked="false"
-                android:textOff="Fine dining \n = No"
-                android:textOn="Fine dining \n = Yes" />
+                android:textColor="#00ffffff"
+
+                />
 
             <ToggleButton
                 android:layout_width="100dp"
@@ -88,47 +91,57 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:id="@+id/pubToggle"
+                android:background="@drawable/pub_toggle"
                 android:checked="false"
                 android:enabled="true"
                 android:onClick="updatePreferences"
-                android:textOn="Pub \n = Yes"
-                android:textOff="Pub \n = No" />
+                android:textColor="#00ffffff"
+                />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
                 android:id="@+id/cafeToggle"
+                android:background="@drawable/cafe_toggle"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:onClick="updatePreferences"
                 android:layout_below="@+id/fastFoodToggle"
-                android:textOff="Cafe \n = No"
-                android:textOn="Cafe \n = Yes" />
+                android:layout_marginTop="10dp"
+                android:checked="false"
+                android:textColor="#00ffffff"
+                />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
                 android:id="@+id/romanticToggle"
+                android:background="@drawable/romantic_toggle"
                 android:layout_below="@+id/fineDiningToggle"
                 android:layout_alignLeft="@+id/fineDiningToggle"
                 android:layout_alignStart="@+id/fineDiningToggle"
                 android:onClick="updatePreferences"
-                android:textOff="Romantic \n = No"
-                android:textOn="Romantic \n = Yes" />
+                android:layout_marginTop="10dp"
+                android:checked="false"
+                android:textColor="#00ffffff"
+                />
 
             <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:text="New ToggleButton"
                 android:id="@+id/buffetToggle"
+                android:background="@drawable/buffet_toggle"
                 android:layout_below="@+id/pubToggle"
                 android:layout_alignLeft="@+id/pubToggle"
                 android:onClick="updatePreferences"
-                android:textOff="Buffet \n = No"
-                android:textOn="Buffed \n = Yes" />
+                android:layout_marginTop="10dp"
+                android:checked="false"
+                android:textColor="#00ffffff"
+                />
 
             <ToggleButton
                 android:layout_width="100dp"
