@@ -458,7 +458,52 @@ public class DatabaseHandler {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
+
+
+    public void getReviewAvarageFromRestaurant(String restaurant_id, final callbackGetReviewAvarageFromRestaurant callback){
+        String USER_URL = "http://" +  IP + "/android_connect/getAvarageFromRestaurant.php?restaurant_id=" + restaurant_id;
+        StringRequest stringRequest = new StringRequest(USER_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                String resultAvarage = "";
+                ArrayList<Double> avarageList = new ArrayList<>();
+                try {
+                    JSONObject jsonObject = new JSONObject(response.substring(response.indexOf("{"), response.lastIndexOf("}") + 1));  //response normalt
+                    JSONArray result = jsonObject.getJSONArray("result");
+                    int numberOfResultsGathered = 0;
+
+                    Log.d("JSONarray Length","                    sddsds " + result.length());
+                    for(int i = 0; i < result.length(); i++){
+                        JSONObject userData = result.getJSONObject(numberOfResultsGathered);
+                        resultAvarage = userData.getString("avarage");
+                        avarageList.add(Double.parseDouble(resultAvarage));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                double avarageRating = 0;
+                for(int i = 0; i < avarageList.size(); i++){
+                    avarageRating += avarageList.get(i);
+                }
+                avarageRating /= avarageList.size();
+                callback.onSuccess(avarageRating);
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Toast.makeText(MainActivity.this, error.getMessage().toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+    public interface callbackGetReviewAvarageFromRestaurant{
+        void onSuccess(double avarage);
+    }
+
     public interface callbackGetAllUserData{
         void onSuccess(ArrayList<User> userList);
     }
+
 }

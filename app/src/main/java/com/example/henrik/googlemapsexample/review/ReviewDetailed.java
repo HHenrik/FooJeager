@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -33,6 +34,9 @@ public class ReviewDetailed extends AppCompatActivity{
     TextView dislikes;
     TextView review;
 
+    Button likeButton;
+    Button dislikeButton;
+
     RatingBar affBar;
     RatingBar staffBar;
     RatingBar amBar;
@@ -49,11 +53,15 @@ public class ReviewDetailed extends AppCompatActivity{
         dislikes = (TextView) findViewById(R.id.dislikeValue);
         review = (TextView) findViewById(R.id.reviewText);
 
+        likeButton = (Button) findViewById(R.id.likeButton);
+        dislikeButton = (Button) findViewById(R.id.dislikeButton);
+
         affBar = (RatingBar) findViewById(R.id.affBar);
         staffBar = (RatingBar) findViewById(R.id.staffBar);
         amBar = (RatingBar) findViewById(R.id.amBar);
         qBar = (RatingBar) findViewById(R.id.qBar);
         averageBar = (RatingBar) findViewById(R.id.averageBar);
+
 
 
         rev = DataStorage.getInstance().getReview();
@@ -72,6 +80,37 @@ public class ReviewDetailed extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+/*
+        likeButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dbHandler.addLikeorDislike( rev.getDeviceId(), rev.getReviewId(), 1);
+            }
+        });
+
+        dislikeButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dbHandler.addLikeorDislike( rev.getDeviceId(), rev.getReviewId(), 0);
+            }
+        });*/
+    }
+
+    public void onClick(View view){
+        switch(view.getId()){
+            case R.id.likeButton:
+                dbHandler.addLikeorDislike( rev.getDeviceId(), rev.getReviewId(), 1);
+                Log.d("LIKE", " NAOW");
+                break;
+            case R.id.dislikeButton:
+                Log.d("DISLIKE", " NAOW");
+                dbHandler.addLikeorDislike( rev.getDeviceId(), rev.getReviewId(), 0);
+                break;
+
+        }
+        //finish();
     }
 
     private void postResults(){
