@@ -9,6 +9,7 @@ import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
 import com.example.henrik.googlemapsexample.R;
+import com.example.henrik.googlemapsexample.globalclasses.DataStorage;
 
 public class Activity_FilterMenu extends AppCompatActivity implements View.OnClickListener {
     private String SAVED_INFO = "savedFilters";
@@ -43,7 +44,7 @@ public class Activity_FilterMenu extends AppCompatActivity implements View.OnCli
         preferences = getSharedPreferences(SAVED_INFO, MODE_PRIVATE);
         editor = preferences.edit();
 
-
+    DataStorage.getInstance().setFilterIsActive(true);
 
         //Initialize the buttons to corresponding ID
         fastFoodToggle = (ToggleButton) findViewById(R.id.fastFoodToggle);
