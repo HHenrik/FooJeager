@@ -19,6 +19,7 @@ public class DataStorage {
     private int activeRestaurantIndex;
     private ReviewObject review;
     private boolean fromReview = false;
+    private boolean filterIsActive = false;
 
     private DataStorage(){
 
@@ -94,5 +95,13 @@ public class DataStorage {
 
     public void setFromReview(boolean fromReview) {
         this.fromReview = fromReview;
+    }
+
+    public boolean isFilterIsActive() {
+        return filterIsActive;
+    }
+
+    public void setFilterIsActive(boolean filterIsActive) {
+        this.filterIsActive = filterIsActive;
     }
 }

@@ -327,7 +327,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
     protected void onResume() { //Tydligen tar listeners energi o cpukraft. Därför onResume samt onPause.
         super.onResume();
 
-        if(firstTimeStart){
+        if(firstTimeStart && DataStorage.getInstance().isFilterIsActive()){
             firstResume = true;
             skit = true;
             restaurantFilters.clear();
@@ -350,6 +350,7 @@ public class MainActivity extends FragmentActivity implements LocationListener ,
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
         firstTimeStart = true;
+        DataStorage.getInstance().setFilterIsActive(false);
     }
 
     protected void onPause() {
