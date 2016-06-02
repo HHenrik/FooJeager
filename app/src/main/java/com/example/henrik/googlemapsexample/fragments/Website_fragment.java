@@ -28,7 +28,6 @@ public class Website_fragment extends Fragment {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(DataStorage.getInstance().getRestaurantList().get(DataStorage.getInstance().getActiveRestaurant()).getWebsiteLink());
         webView.setWebViewClient(new WebViewClient());
-
     }
 }
 

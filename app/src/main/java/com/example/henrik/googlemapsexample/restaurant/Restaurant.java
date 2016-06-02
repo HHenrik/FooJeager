@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class Restaurant {
     private LatLng position;
     private String googleRating;
-    private String open_now;
     private String name;
     private String vicinity;
     private Marker marker;
@@ -34,22 +33,12 @@ public class Restaurant {
         this.marker = marker;
     }
 
-    //Byt till constructor för saker som bara ska sättas en gång
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String isOpen_now() {
-        return open_now;
-    }
-
-    public void setOpen_now(String open_now) {
-        this.open_now = open_now;
     }
 
     public String getGoogleRating() {
@@ -68,11 +57,6 @@ public class Restaurant {
         this.position = position;
     }
 
-
-    public String getVicinity() {
-        return vicinity;
-    }
-
     public void setVicinity(String vicinity) {
         this.vicinity = vicinity;
     }
@@ -84,7 +68,6 @@ public class Restaurant {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
 
     public String getId() {
         return id;
@@ -100,10 +83,6 @@ public class Restaurant {
 
     public void setWebsiteLink(String websiteLink) {
         this.websiteLink = websiteLink;
-    }
-
-    public String getPriceLevel() {
-        return priceLevel;
     }
 
     public void setPriceLevel(String priceLevel) {

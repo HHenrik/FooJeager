@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class DataStorage {
     private static DataStorage dataStorage;
     private ArrayList<Restaurant> restaurantList = new ArrayList();
-    private boolean isPlacedLoaded = false;
     private LatLng userPosition;
     private boolean userPositionSupport = false;
     private boolean reviewType;
@@ -21,12 +20,13 @@ public class DataStorage {
     private boolean fromReview = false;
     private boolean filterIsActive = false;
 
-    private DataStorage(){
+    private DataStorage() {
 
     }
+
     //---------------------GETS INFORMATION FROM DATASTORAGE----------------------\\
-    public static DataStorage getInstance(){
-        if(dataStorage == null){
+    public static DataStorage getInstance() {
+        if (dataStorage == null) {
             dataStorage = new DataStorage();
         }
 
@@ -39,14 +39,6 @@ public class DataStorage {
 
     public void setRestaurantList(ArrayList<Restaurant> restaurantList) {
         this.restaurantList = restaurantList;
-    }
-
-    public boolean isPlacedLoaded() {
-        return isPlacedLoaded;
-    }
-
-    public void setPlacedLoaded(boolean placedLoaded) {
-        isPlacedLoaded = placedLoaded;
     }
 
     public LatLng getUserPosition() {

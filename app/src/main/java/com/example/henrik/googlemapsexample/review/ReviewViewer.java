@@ -42,23 +42,7 @@ public class ReviewViewer extends AppCompatActivity {
 
         if(DataStorage.getInstance().isReviewType()) {
             googleReview = false;
-            /*list.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Mannen i restaurangen vet inte att han snart kommer bli sparkad", "", "", ""));
-            list.add(new ReviewObject(0, 2, 0, 0, 0, 0, 0, 0, "Möglig mat men den var ändå ätbar. Otrevlig personal men jag återkommer ändå.", "", "", ""));
-            list.add(new ReviewObject(0, 5, 0, 0, 0, 0, 0, 0, "Top notch, fan rätt schysst asså! Äter mer än gärna här igen.", "", "", ""));
-            list.add(new ReviewObject(0, 4, 0, 0, 0, 0, 0, 0, "", "", "", ""));
-            list.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Inte mycket att hänga i granen men helt ok", "", "", ""));
-            list.add(new ReviewObject(0, 5, 0, 0, 0, 0, 0, 0, "https://www.youtube.com/channel/UCPlV0OpQMImKviSTWHJEDi", "", "", ""));
-            list.add(new ReviewObject(0, 3, 0, 0, 0, 0, 0, 0, "Äter hellre på khai mui.", "", "", ""));
-            displayReviews();*/
             getRestaurantReviews(restaurantId);
-
-           /*for(int i = 0; i < list.size(); i++){
-                getUsername(list.get(i).getDeviceId());
-                list.get(i).setUser(name);
-                System.out.println("haalp");
-            }*/
-
-
         }
         else{
             googleReview = true;

@@ -29,19 +29,19 @@ public class ReviewDetailed extends AppCompatActivity{
 
     private DatabaseHandler dbHandler = new DatabaseHandler(this);
 
-    TextView userName;
-    TextView likes;
-    TextView dislikes;
-    TextView review;
+    private TextView userName;
+    private TextView likes;
+    private TextView dislikes;
+    private TextView review;
 
-    Button likeButton;
-    Button dislikeButton;
+    private Button likeButton;
+    private Button dislikeButton;
 
-    RatingBar affBar;
-    RatingBar staffBar;
-    RatingBar amBar;
-    RatingBar qBar;
-    RatingBar averageBar;
+    private RatingBar affBar;
+    private RatingBar staffBar;
+    private RatingBar amBar;
+    private RatingBar qBar;
+    private RatingBar averageBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

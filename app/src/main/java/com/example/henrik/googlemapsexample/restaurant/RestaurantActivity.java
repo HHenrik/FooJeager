@@ -173,11 +173,10 @@ public class RestaurantActivity extends AppCompatActivity {
 
     public void openingTimesButton(View v) {
         if (restaurantList.get(restaurantID).getOpenHoursArray() != null) {
-            Log.d("clicked", "has");
             RestaurantOpeningTimes_fragment fragment = new RestaurantOpeningTimes_fragment();
             createYourFragment(fragment);
         } else {
-            //Dölj knappen eller toast
+            Toast.makeText(getApplicationContext(), "There is no opening times for this restaurant", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -187,12 +186,8 @@ public class RestaurantActivity extends AppCompatActivity {
 
         if (restaurantList.get(restaurantID).getOpenNow()) {
             openStatus.setText("Restaurant is open");
-            Log.d("Open Satuts true",String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
-            Log.d(restaurantList.get(restaurantID).getName(),String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
         } else {
             openStatus.setText("Restaurant is closed");
-            Log.d("Open Satuts false",String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
-            Log.d(restaurantList.get(restaurantID).getName(),String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
         }
 
     }
