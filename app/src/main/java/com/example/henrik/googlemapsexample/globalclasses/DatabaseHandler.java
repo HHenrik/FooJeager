@@ -28,7 +28,7 @@ public class DatabaseHandler {
 
     //Jocke hemma iP = 192.168.1.83
 
-    String IP = "194.47.41.188";
+    String IP = "194.47.32.164";
 
             //"194.47.41.188";
 

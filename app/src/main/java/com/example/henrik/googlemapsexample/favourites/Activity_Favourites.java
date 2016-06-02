@@ -71,7 +71,7 @@ public class Activity_Favourites extends AppCompatActivity {
         restaurantList = DataStorage.getInstance().getRestaurantList();
         markedFavIds = preferences.getStringSet("markedFavs", new HashSet<String>());
         loadedFavList = new ArrayList(markedFavIds);
-
+/*
         for(int i = 0; i < loadedFavList.size(); i++) {
             Log.d("INDEX " + String.valueOf(i), " = " + loadedFavList.get(i));
 
@@ -90,15 +90,15 @@ public class Activity_Favourites extends AppCompatActivity {
         while(amountOfLoads < loadedFavList.size()) {
             storedAverageValues = getAverages();
         }
-
+*/
         for(int i = 0; i < loadedFavList.size(); i++){
             for(int j = 0; j < restaurantList.size(); j++){
 
 
                 if(loadedFavList.get(i).equals(restaurantList.get(j).getId())){
                     Log.d("HIT INDEX: ", "Loaded: " + String.valueOf(i) + " Restaurant" + String.valueOf(j));
-                    favouriteList.add(new Object_Favourite(i+1, restaurantList.get(j).getId(), restaurantList.get(j).getName(), Float.parseFloat(Double.toString(storedAverageValues.get(i)))));
-                    indexContainer.add(j);
+                    favouriteList.add(new Object_Favourite(i+1, restaurantList.get(j).getId(), restaurantList.get(j).getName(), Float.parseFloat(restaurantList.get(j).getGoogleRating())));
+  //                  indexContainer.add(j);
                 }
 
 
