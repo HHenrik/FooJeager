@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +45,8 @@ public class RestaurantActivity extends AppCompatActivity {
     private Set<String> markedFavIds;
     private int storedAtIndex = -1;
     private List loadedFavList;
+
+    private TextView openStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,14 +183,14 @@ public class RestaurantActivity extends AppCompatActivity {
     }
 
     private void showRestaurantStatusPicture() {
-        ImageView openNowStatus;
-        openNowStatus = (ImageView) findViewById(R.id.openNow);
+        openStatus = (TextView)  findViewById(R.id.openStatus);
+
         if (restaurantList.get(restaurantID).getOpenNow()) {
-            //openNowStatus.setImageResource(R.drawable.open);
+            openStatus.setText("Restaurant is open");
             Log.d("Open Satuts true",String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
             Log.d(restaurantList.get(restaurantID).getName(),String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
         } else {
-            //openNowStatus.setImageResource(R.drawable.closed);
+            openStatus.setText("Restaurant is closed");
             Log.d("Open Satuts false",String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
             Log.d(restaurantList.get(restaurantID).getName(),String.valueOf(restaurantList.get(restaurantID).getOpenNow()));
         }
